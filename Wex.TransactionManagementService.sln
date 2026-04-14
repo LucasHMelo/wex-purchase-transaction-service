@@ -3,6 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9158E824-9449-4556-92EE-8978F4E4D7F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManager.Api", "src\Wex.TransactionManager.Api\Wex.TransactionManager.Api.csproj", "{C6856FD0-40C5-4D04-B34B-F6595F8EAF21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManager.Application", "src\Wex.TransactionManager.Application\Wex.TransactionManager.Application.csproj", "{977DFCE3-4158-4AF2-80D6-09A79CD67B0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManager.Domain", "src\Wex.TransactionManager.Domain\Wex.TransactionManager.Domain.csproj", "{F3447C8B-4171-4F82-A8C2-B6B5048E4F6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManager.Infrastructure", "src\Wex.TransactionManager.Infrastructure\Wex.TransactionManager.Infrastructure.csproj", "{4CE9B833-4B66-46E3-AD13-8832B3E2936F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{811DC8E7-46FE-4274-BA13-76007B823708}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManagement.Api.Tests", "tests\Wex.TransactionManagement.Api.Tests\Wex.TransactionManagement.Api.Tests.csproj", "{0E792F16-9671-4E5E-842A-C38060AC3278}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManagement.Application.Tests", "tests\Wex.TransactionManagement.Application.Tests\Wex.TransactionManagement.Application.Tests.csproj", "{E84CD392-37E5-456F-99F7-9022CD610F10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManagement.Domain.Tests", "tests\Wex.TransactionManagement.Domain.Tests\Wex.TransactionManagement.Domain.Tests.csproj", "{6B21278A-22B5-496D-93E3-F0385D6C6331}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManagement.Infrastructure.Tests", "tests\Wex.TransactionManagement.Infrastructure.Tests\Wex.TransactionManagement.Infrastructure.Tests.csproj", "{DE0929EF-02CE-49EA-91BC-324917B45DA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -10,5 +30,49 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6856FD0-40C5-4D04-B34B-F6595F8EAF21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6856FD0-40C5-4D04-B34B-F6595F8EAF21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6856FD0-40C5-4D04-B34B-F6595F8EAF21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6856FD0-40C5-4D04-B34B-F6595F8EAF21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{977DFCE3-4158-4AF2-80D6-09A79CD67B0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{977DFCE3-4158-4AF2-80D6-09A79CD67B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{977DFCE3-4158-4AF2-80D6-09A79CD67B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{977DFCE3-4158-4AF2-80D6-09A79CD67B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3447C8B-4171-4F82-A8C2-B6B5048E4F6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3447C8B-4171-4F82-A8C2-B6B5048E4F6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3447C8B-4171-4F82-A8C2-B6B5048E4F6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3447C8B-4171-4F82-A8C2-B6B5048E4F6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CE9B833-4B66-46E3-AD13-8832B3E2936F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CE9B833-4B66-46E3-AD13-8832B3E2936F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CE9B833-4B66-46E3-AD13-8832B3E2936F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CE9B833-4B66-46E3-AD13-8832B3E2936F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E792F16-9671-4E5E-842A-C38060AC3278}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E792F16-9671-4E5E-842A-C38060AC3278}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E792F16-9671-4E5E-842A-C38060AC3278}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E792F16-9671-4E5E-842A-C38060AC3278}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E84CD392-37E5-456F-99F7-9022CD610F10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E84CD392-37E5-456F-99F7-9022CD610F10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E84CD392-37E5-456F-99F7-9022CD610F10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E84CD392-37E5-456F-99F7-9022CD610F10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B21278A-22B5-496D-93E3-F0385D6C6331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B21278A-22B5-496D-93E3-F0385D6C6331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B21278A-22B5-496D-93E3-F0385D6C6331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B21278A-22B5-496D-93E3-F0385D6C6331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE0929EF-02CE-49EA-91BC-324917B45DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE0929EF-02CE-49EA-91BC-324917B45DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE0929EF-02CE-49EA-91BC-324917B45DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE0929EF-02CE-49EA-91BC-324917B45DA2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6856FD0-40C5-4D04-B34B-F6595F8EAF21} = {9158E824-9449-4556-92EE-8978F4E4D7F2}
+		{977DFCE3-4158-4AF2-80D6-09A79CD67B0C} = {9158E824-9449-4556-92EE-8978F4E4D7F2}
+		{F3447C8B-4171-4F82-A8C2-B6B5048E4F6F} = {9158E824-9449-4556-92EE-8978F4E4D7F2}
+		{4CE9B833-4B66-46E3-AD13-8832B3E2936F} = {9158E824-9449-4556-92EE-8978F4E4D7F2}
+		{0E792F16-9671-4E5E-842A-C38060AC3278} = {811DC8E7-46FE-4274-BA13-76007B823708}
+		{E84CD392-37E5-456F-99F7-9022CD610F10} = {811DC8E7-46FE-4274-BA13-76007B823708}
+		{6B21278A-22B5-496D-93E3-F0385D6C6331} = {811DC8E7-46FE-4274-BA13-76007B823708}
+		{DE0929EF-02CE-49EA-91BC-324917B45DA2} = {811DC8E7-46FE-4274-BA13-76007B823708}
 	EndGlobalSection
 EndGlobal
