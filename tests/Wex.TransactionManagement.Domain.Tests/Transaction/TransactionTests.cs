@@ -3,6 +3,7 @@ using Xunit;
 using NSubstitute;
 using DomainEntity = Wex.TransactionManager.Domain.Transaction;
 using Wex.TransactionManager.Domain.Exceptions;
+using Shouldly;
 
 namespace Wex.TransactionManagement.Domain.Tests.Transaction;
 
@@ -34,15 +35,14 @@ public class TransactionTests
         var datetimeAfter = DateTime.UtcNow;
 
         // Asert
-        Assert.NotNull(transaction);
-        Assert.NotEmpty(transaction.Id.ToString());
-        Assert.Equal(validData.Description, transaction.Description);
-        Assert.True(validData.Amount == transaction.Amount);
-        Assert.NotEqual(default(Guid), transaction.Id);
-        Assert.NotEqual(default(DateTime), transaction.CreatedAt);
-        Assert.True(transaction.CreatedAt > datetimeBefore);
-        Assert.True(transaction.CreatedAt < datetimeAfter);
-
+        transaction.ShouldNotBeNull();
+        transaction.Id.ToString().ShouldNotBeEmpty();
+        transaction.Description.ShouldBeEquivalentTo(validData.Description);
+        transaction.Amount.ShouldBe(validData.Amount);
+        transaction.Id.ShouldNotBe(default(Guid));
+        transaction.CreatedAt.ShouldNotBe(default(DateTime));
+        transaction.CreatedAt.ShouldBeGreaterThan(datetimeBefore);
+        transaction.CreatedAt.ShouldBeLessThan(datetimeAfter);
     }
 
     [Theory(DisplayName = nameof(InstantiateErrorWhenDescriptionIsNull))]
@@ -53,7 +53,7 @@ public class TransactionTests
         Action action =
             () => new DomainEntity.Transaction(description!, 100);
         var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Description should not be null", exception.Message);
+        exception.Message.ShouldBeEquivalentTo("Description should not be null");
     }
 
     [Fact(DisplayName = nameof(InstantiateErrorWhenDescriptionIsGreaterThan50Characters))]
@@ -63,8 +63,8 @@ public class TransactionTests
         var invalidDescription = String.Join(null, Enumerable.Range(1, 51).Select(_ => "a").ToArray());
         Action action =
             () => new DomainEntity.Transaction(invalidDescription, 100);
-        var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Description should be less or equal 50 characters long", exception.Message);
+        var exception = Should.Throw<EntityValidationException>(action);
+        exception.Message.ShouldBeEquivalentTo("Description should be less or equal 50 characters long");
     }
 
     [Theory(DisplayName = nameof(InstantiateErrorWhenAmountIsInvalid))]
@@ -74,8 +74,9 @@ public class TransactionTests
     {
         Action action =
             () => new DomainEntity.Transaction("Description", amount);
-        var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Amount should not be under zero", exception.Message);
+        var exception = Should.Throw<EntityValidationException>(action).;
+        exception.Message.ShouldBeEquivalentTo("Amount should not be under zero");
+
     }
 
     // [Fact]
