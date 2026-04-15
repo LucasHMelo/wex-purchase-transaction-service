@@ -29,14 +29,41 @@ public class TransactionTests
         var datetimeBefore = DateTime.UtcNow;
 
         // Act
-        var transaction = new DomainEntity.Transaction(validData.Description, validData.Amount);
-        var datetimeAfter = DateTime.UtcNow;
+        var transaction = new DomainEntity.Transaction(validData.Description, validData.Amount.Value);
+        var datetimeAfter = DateTime.UtcNow.AddSeconds(1);
 
         // Asert
         transaction.ShouldNotBeNull();
         transaction.Id.ToString().ShouldNotBeEmpty();
         transaction.Description.ShouldBeEquivalentTo(validData.Description);
-        transaction.Amount.ShouldBe(validData.Amount);
+        transaction.Amount.Value.ShouldBe(validData.Amount.Value);
+        transaction.Id.ShouldNotBe(default(Guid));
+        transaction.CreatedAt.ShouldNotBe(default(DateTime));
+        transaction.CreatedAt.ShouldBeGreaterThan(datetimeBefore);
+        transaction.CreatedAt.ShouldBeLessThan(datetimeAfter);
+    }
+
+    [Theory(DisplayName = nameof(InstantiateWhenAmountIsNotDoubleRounded))]
+    [Trait("Domain", "Transaction - Aggregates")]
+    [InlineData(1.121212)]
+    [InlineData(1.1)]
+    [InlineData(1.001)]
+    public void InstantiateWhenAmountIsNotDoubleRounded(decimal amount)
+    {
+        // Arrange 
+        var validData = _transactionTestFixture.GetValidTransaction();
+        var datetimeBefore = DateTime.UtcNow;
+        // Act
+        var transaction = new DomainEntity.Transaction(validData.Description, amount);
+        var datetimeAfter = DateTime.UtcNow.AddSeconds(1);
+
+        // Asert
+        var amountRounded = Math.Round(amount, 2, MidpointRounding.AwayFromZero);
+
+        transaction.ShouldNotBeNull();
+        transaction.Id.ToString().ShouldNotBeEmpty();
+        transaction.Description.ShouldBeEquivalentTo(validData.Description);
+        transaction.Amount.Value.ShouldBe(amountRounded);
         transaction.Id.ShouldNotBe(default(Guid));
         transaction.CreatedAt.ShouldNotBe(default(DateTime));
         transaction.CreatedAt.ShouldBeGreaterThan(datetimeBefore);
@@ -68,13 +95,13 @@ public class TransactionTests
     [Theory(DisplayName = nameof(InstantiateErrorWhenAmountIsInvalid))]
     [Trait("Domain", "Transaction - Aggregates")]
     [InlineData(-1)]
-    public void InstantiateErrorWhenAmountIsInvalid(double amount)
+    [InlineData(-1.000)]
+    public void InstantiateErrorWhenAmountIsInvalid(decimal amount)
     {
         Action action =
             () => new DomainEntity.Transaction("Description", amount);
         var exception = Should.Throw<EntityValidationException>(action);
-        exception.Message.ShouldBeEquivalentTo("Amount should not be under zero");
-
+        exception.Message.ShouldBeEquivalentTo("Value must be positive");
     }
 
     // [Fact]

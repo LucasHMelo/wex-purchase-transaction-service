@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="DomainValidation\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Transaction\" />
+    <Folder Include="ValueObjects\" />
   </ItemGroup>
 
 </Project>

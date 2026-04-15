@@ -8,7 +8,7 @@ public class TransactionTestFixture : BaseFixture
     public TransactionTestFixture()
         : base() { }
 
-    public double GetValidTransactionAmount()
+    public decimal GetValidTransactionAmount()
     {
         return Faker.Random.Number(9999);
     }
