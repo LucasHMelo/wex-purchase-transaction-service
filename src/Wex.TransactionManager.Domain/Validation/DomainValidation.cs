@@ -1,6 +1,6 @@
 using Wex.TransactionManager.Domain.Exceptions;
 
-namespace Wex.TransactionManager.Domain.DomainValidation;
+namespace Wex.TransactionManager.Domain.Validation;
 
 public class DomainValidation
 {

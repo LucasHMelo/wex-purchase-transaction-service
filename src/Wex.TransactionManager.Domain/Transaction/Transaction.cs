@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using Wex.TransactionManager.Domain.Exceptions;
+using Wex.TransactionManager.Domain.Validation;
 using Wex.TransactionManager.Domain.ValueObjects;
 
 namespace Wex.TransactionManager.Domain.Transaction;
@@ -23,9 +24,7 @@ public class Transaction
 
     public void Validate()
     {
-        if (Description == null)
-            throw new EntityValidationException($"{nameof(Description)} should not be null");
-        if (Description.Length > 50)
-            throw new EntityValidationException($"{nameof(Description)} should be less or equal 50 characters long");
+        DomainValidation.NotNull(Description, nameof(Description));
+        DomainValidation.MaxLength(Description, 50, nameof(Description));
     }
 }
