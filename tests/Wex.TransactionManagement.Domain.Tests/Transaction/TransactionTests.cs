@@ -1,12 +1,11 @@
 
-using Xunit;
-using NSubstitute;
 using DomainEntity = Wex.TransactionManager.Domain.Transaction;
 using Wex.TransactionManager.Domain.Exceptions;
 using Shouldly;
 
 namespace Wex.TransactionManagement.Domain.Tests.Transaction;
 
+[Collection(nameof(TransactionTestFixture))]
 public class TransactionTests
 {
 
@@ -14,20 +13,19 @@ public class TransactionTests
     // Transaction date: must be a valid date format
     // Purchase amount: must be a valid positive amount rounded to the nearest cent
     // Unique identifier: must uniquely identify the purchase
+    private readonly TransactionTestFixture _transactionTestFixture;
 
-
+    public TransactionTests(TransactionTestFixture transactionTestFixture)
+    {
+        _transactionTestFixture = transactionTestFixture;
+    }
 
     [Fact(DisplayName = nameof(Instantiate))]
     [Trait("Domain", "Transaction - Aggregates")]
     public void Instantiate()
     {
         // Arrange 
-        var validData = new
-        {
-            TransactionId = Guid.NewGuid(),
-            Description = "category name",
-            Amount = 0
-        };
+        var validData = _transactionTestFixture.GetValidTransaction();
         var datetimeBefore = DateTime.UtcNow;
 
         // Act
@@ -74,7 +72,7 @@ public class TransactionTests
     {
         Action action =
             () => new DomainEntity.Transaction("Description", amount);
-        var exception = Should.Throw<EntityValidationException>(action).;
+        var exception = Should.Throw<EntityValidationException>(action);
         exception.Message.ShouldBeEquivalentTo("Amount should not be under zero");
 
     }
