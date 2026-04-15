@@ -1,6 +1,7 @@
 
 using Xunit;
 using NSubstitute;
+using DomainEntity = Wex.TransactionManager.Domain.Transaction;
 
 namespace Wex.TransactionManagement.Domain.Tests.Transaction;
 
@@ -23,19 +24,23 @@ public class TransactionTests
         {
             TransactionId = Guid.NewGuid(),
             Description = "category name",
-            CreatedAt = DateTime.UtcNow,
             Amount = 0
         };
+        var datetimeBefore = DateTime.UtcNow;
 
         // Act
-
-        var transaction = new Transaction(validData.TransactionId, validData.Description, validData.CreatedAt, validData.Amount);
+        var transaction = new DomainEntity.Transaction(validData.Description, validData.Amount);
+        var datetimeAfter = DateTime.UtcNow;
 
         // Asert
-        transaction.TransactionId.ShouldBe(validData.TransactionId);
-        transaction.Description.ShouldBe(validData.Description);
-        transaction.CreatedAt.ShouldBe(validData.CreatedAt);
-        transaction.Amount.ShouldBe(validData.Amount);
+        Assert.NotNull(transaction);
+        Assert.NotEmpty(transaction.Id.ToString());
+        Assert.Equal(validData.Description, transaction.Description);
+        Assert.True(validData.Amount == transaction.Amount);
+        Assert.NotEqual(default(Guid), transaction.Id);
+        Assert.NotEqual(default(DateTime), transaction.CreatedAt);
+        Assert.True(transaction.CreatedAt > datetimeBefore);
+        Assert.True(transaction.CreatedAt < datetimeAfter);
 
     }
 
