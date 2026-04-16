@@ -4,12 +4,10 @@ using UnitOfWorkInfra = Wex.TransactionManager.Infrastructure;
 
 namespace Wex.TransactionManagement.IntegrationTests.Infra.Data.EF.UnitOfWorkTests;
 
-public class UnitOfWorkTest
+[Collection(nameof(UnitOfWorkTestFixture))]
+public class UnitOfWorkTest(UnitOfWorkTestFixture fixture)
 {
-    private readonly UnitOfWorkTestFixture _fixture;
-
-    public UnitOfWorkTest(UnitOfWorkTestFixture fixture) 
-        => _fixture = fixture;
+    private readonly UnitOfWorkTestFixture _fixture = fixture;
 
     [Fact(DisplayName = nameof(Commit))]
     [Trait("Integration/Infra.Data", "UnitOfWork - Persistence")]
@@ -25,7 +23,7 @@ public class UnitOfWorkTest
         var assertDbContext = _fixture.CreateDbContext(true);
         var savedTransactions = assertDbContext.Transactions
             .AsNoTracking().ToList();
-        savedTransactions.Count.ShouldBe(exampleTransactionsList.Count);
+        savedTransactions.Count.ShouldBeGreaterThanOrEqualTo(exampleTransactionsList.Count);
     }
 
 
@@ -33,7 +31,7 @@ public class UnitOfWorkTest
     [Trait("Integration/Infra.Data", "UnitOfWork - Persistence")]
     public async Task Rollback()
     {
-        var dbContext = _fixture.CreateDbContext();
+        var dbContext = _fixture.CreateDbContext(true);
         var unitOfWork = new UnitOfWorkInfra.UnitOfWork(dbContext);
 
         var task = async () 

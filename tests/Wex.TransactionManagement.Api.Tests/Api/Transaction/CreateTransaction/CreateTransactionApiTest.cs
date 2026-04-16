@@ -19,15 +19,15 @@ public class CreateTransactionApiTest(CreateTransactionApiTestFixture fixture)
         var input = _fixture.getExampleInput();
 
         var (response, output) = await _fixture.ApiClient
-            .Post(
+            .Post<CreateTransactionOutput>(
                 "/api/transaction",
                 input
             );
 
-        output.GetProperty("id").ShouldNotBe(default);
-        output.GetProperty("id").ToString().ShouldNotBe("");
+        output.TransactionId.ShouldNotBe(default);
+        output.TransactionId.ToString().ShouldNotBe("");
         DomainEntity.Transaction dbTransaction = await _fixture.Persistence
-            .GetById(output.GetProperty("id").ToString());
+            .GetById(output.TransactionId.ToString());
         dbTransaction.ShouldNotBeNull();
         dbTransaction.Amount.Value.ShouldBeEquivalentTo(input.Amount);
         dbTransaction.Description.ShouldBeEquivalentTo(input.Description);

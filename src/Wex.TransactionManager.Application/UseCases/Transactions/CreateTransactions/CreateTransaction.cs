@@ -12,7 +12,7 @@ public class CreateTransaction(
     private readonly ITransactionRepository _transactionRepository = transactionRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Guid> HandleAsync(
+    public async Task<CreateTransactionOutput> Handle(
         CreateTransactionInput input, 
         CancellationToken cancellationToken)
     {
@@ -25,7 +25,7 @@ public class CreateTransaction(
         await _transactionRepository.Insert(transaction, cancellationToken);
         await _unitOfWork.Commit(cancellationToken);
         
-        return Guid.NewGuid();
+        return CreateTransactionOutput.FromTransaction(transaction) ;
     }
 
 }

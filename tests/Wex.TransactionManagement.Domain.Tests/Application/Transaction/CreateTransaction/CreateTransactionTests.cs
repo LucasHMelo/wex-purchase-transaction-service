@@ -32,7 +32,7 @@ public class CreateTransactionTests(CreateTransactionTestFixture fixture)
             TransactionDate = DateTime.UtcNow
         };
 
-        var output = await useCase.HandleAsync(input, CancellationToken.None);
+        var output = await useCase.Handle(input, CancellationToken.None);
 
         repositoryMock.Received(1).Insert(
             Arg.Any<DomainEntity.Transaction>(),
@@ -59,7 +59,7 @@ public class CreateTransactionTests(CreateTransactionTestFixture fixture)
             _fixture.GetUnitOfWorkMock()
         );
 
-        Func<Task> task = async () => await useCase.HandleAsync(input, CancellationToken.None);
+        Func<Task> task = async () => await useCase.Handle(input, CancellationToken.None);
 
         var ex = await Should
             .ThrowAsync<EntityValidationException>(task);

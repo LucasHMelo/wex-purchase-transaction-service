@@ -1,6 +1,8 @@
+using MediatR;
+
 namespace Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
 
-public interface ICreateTransaction
+public interface ICreateTransaction : IRequestHandler<CreateTransactionInput, CreateTransactionOutput>
 {
-    Task<Guid> HandleAsync(CreateTransactionInput transaction, CancellationToken cancellationToken);
+    Task<CreateTransactionOutput> Handle(CreateTransactionInput transaction, CancellationToken cancellationToken);
 }
