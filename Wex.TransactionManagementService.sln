@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManagement.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManagement.IntegrationTests", "tests\Wex.TransactionManagement.Infrastructure.Tests\Wex.TransactionManagement.IntegrationTests.csproj", "{23940386-8774-4121-9D47-D09182E8D3B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wex.TransactionManagement.E2ETests", "tests\Wex.TransactionManagement.Api.Tests\Wex.TransactionManagement.E2ETests.csproj", "{FD634EFC-185A-4DD1-885B-0B0C06766C05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{23940386-8774-4121-9D47-D09182E8D3B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23940386-8774-4121-9D47-D09182E8D3B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23940386-8774-4121-9D47-D09182E8D3B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD634EFC-185A-4DD1-885B-0B0C06766C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD634EFC-185A-4DD1-885B-0B0C06766C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD634EFC-185A-4DD1-885B-0B0C06766C05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD634EFC-185A-4DD1-885B-0B0C06766C05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,5 +66,6 @@ Global
 		{4CE9B833-4B66-46E3-AD13-8832B3E2936F} = {9158E824-9449-4556-92EE-8978F4E4D7F2}
 		{6B21278A-22B5-496D-93E3-F0385D6C6331} = {811DC8E7-46FE-4274-BA13-76007B823708}
 		{23940386-8774-4121-9D47-D09182E8D3B4} = {811DC8E7-46FE-4274-BA13-76007B823708}
+		{FD634EFC-185A-4DD1-885B-0B0C06766C05} = {811DC8E7-46FE-4274-BA13-76007B823708}
 	EndGlobalSection
 EndGlobal

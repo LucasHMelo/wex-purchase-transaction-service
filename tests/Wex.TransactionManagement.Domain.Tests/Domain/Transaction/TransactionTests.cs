@@ -25,8 +25,8 @@ public class TransactionTests
     public void Instantiate()
     {
         // Arrange 
+        var datetimeBefore = DateTime.UtcNow.AddSeconds(-1);
         var validData = _transactionTestFixture.GetValidTransaction();
-        var datetimeBefore = DateTime.UtcNow;
 
         // Act
         var transaction = new DomainEntity

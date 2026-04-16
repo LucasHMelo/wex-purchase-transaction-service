@@ -13,6 +13,7 @@
     <PackageReference Include="AutoFixture" Version="4.18.1" />
     <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.18.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.3" />
+     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.3" />
     <PackageReference Include="AutoFixture.Xunit2" Version="4.18.1" />
     <PackageReference Include="Bogus" Version="34.0.1" />
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
@@ -28,11 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Api\Transaction\Common\" />
     <Folder Include="Base\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Wex.TransactionManager.Domain\Wex.TransactionManager.Domain.csproj" />
     <ProjectReference Include="..\..\src\Wex.TransactionManager.Infrastructure\Wex.TransactionManager.Infrastructure.csproj" />
   </ItemGroup>
 
