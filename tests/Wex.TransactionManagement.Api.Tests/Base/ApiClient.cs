@@ -31,4 +31,21 @@ public class ApiClient(HttpClient httpClient)
             );
         return (response, output);
     }
+
+    public async Task<(HttpResponseMessage?, string)> Post(
+        string route,
+        object payload
+    )
+    {
+        var response = await _httpClient.PostAsync(
+            route,
+            new StringContent(
+                JsonSerializer.Serialize(payload),
+                Encoding.UTF8,
+                "application/json"
+            )
+        );
+        var outputString = await response.Content.ReadAsStringAsync();
+        return (response, outputString);
+    }
 }

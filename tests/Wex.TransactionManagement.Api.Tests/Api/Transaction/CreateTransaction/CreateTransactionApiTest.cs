@@ -1,4 +1,7 @@
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Shouldly;
+using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
 using DomainEntity = Wex.TransactionManager.Domain.Entities;
 
 namespace Wex.TransactionManagement.E2ETests.Api.Transaction.CreateTransaction;
@@ -15,12 +18,13 @@ public class CreateTransactionApiTest(CreateTransactionApiTestFixture fixture)
         var input = _fixture.getExampleInput();
 
         var (response, output) = await _fixture.ApiClient
-            .Post<Guid>(
-                "/transactions",
+            .Post(
+                "/api/transaction",
                 input
             );
 
-        output.ShouldNotBe(default);;
+        output.ShouldNotBe(default);
+        output.ShouldNotBe("");
         DomainEntity.Transaction dbTransaction = await _fixture.Persistence
             .GetById(output);
         dbTransaction.ShouldNotBeNull();
@@ -28,6 +32,31 @@ public class CreateTransactionApiTest(CreateTransactionApiTestFixture fixture)
         dbTransaction.Description.ShouldBeEquivalentTo(input.Description);
         dbTransaction.TransactionDate.ShouldBeEquivalentTo(input.TransactionDate);
         dbTransaction.Id.ShouldNotBe(default);
+    }
+
+    [Theory(DisplayName = nameof(ThrowWhenCantInstantiateAggregate))]
+    [Trait("EndToEnd/API", "Transaction - Endpoints")]
+    [MemberData(
+        nameof(CreateTransactionApiTestDataGenerator.GetInvalidInputs),
+        MemberType = typeof(CreateTransactionApiTestDataGenerator)
+    )]
+    public async Task ThrowWhenCantInstantiateAggregate(
+        CreateTransactionInput input,
+        string expectedDetail
+    ){
+        var (response, output) = await _fixture.
+            ApiClient.Post<ProblemDetails>(
+                "/api//transaction",
+                input
+            );
+
+        response.ShouldNotBeNull();
+        response!.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+        output.ShouldNotBeNull();
+        output!.Title.ShouldBe("One or more validation errors ocurred");
+        output.Type.ShouldBe("UnprocessableEntity");
+        output.Status.ShouldBe((int)HttpStatusCode.UnprocessableEntity);
+        output.Detail.ShouldBe(expectedDetail);
     }
 
 }

@@ -1,16 +1,14 @@
-using Microsoft.EntityFrameworkCore;
 using Wex.TransactionManagement.IntegrationTests.Base;
 using Wex.TransactionManager.Domain.Entities;
-using Wex.TransactionManager.Infrastructure.Data.DbContexts;
 
-namespace Wex.TransactionManagement.IntegrationTests.Infra.Data.EF.Repositories.TransactionRepository;
+namespace Wex.TransactionManagement.IntegrationTests.Infra.Data.EF.UnitOfWorkTests;
 
-[CollectionDefinition(nameof(TransactionRepositoryTestFixture))]
-public class TransactionRepositoryTestFixtureCollection
-    : ICollectionFixture<TransactionRepositoryTestFixture>
-{}
+[CollectionDefinition(nameof(UnitOfWorkTestFixture))]
+public class UnitOfWorkTestFixtureCollection
+    : ICollectionFixture<UnitOfWorkTestFixture>
+{ }
 
-public class TransactionRepositoryTestFixture
+public class UnitOfWorkTestFixture
     : BaseFixture
 {
     public decimal GetValidTransactionAmount()
@@ -35,5 +33,9 @@ public class TransactionRepositoryTestFixture
 
     public Transaction GetExampleTransaction()
         => new Transaction(GetValidTransactionDescription(), GetValidTransactionAmount(), GetValidTransactionDate());
+
+    public List<Transaction> GetExampleTransactionsList(int length = 10)
+        => Enumerable.Range(1, length)
+            .Select(_ => GetExampleTransaction()).ToList();
 
 }

@@ -9,7 +9,7 @@ public class TransactionRepository
     : ITransactionRepository
 {
     private readonly WexTransactionDbContext _context;
-    private DbSet<Transaction> _categories 
+    private DbSet<Transaction> _transactions 
         => _context.Set<Transaction>();
 
     public TransactionRepository(WexTransactionDbContext context) 
@@ -19,7 +19,7 @@ public class TransactionRepository
         Transaction aggregate, 
         CancellationToken cancellationToken
     )
-        => await _categories.AddAsync(aggregate, cancellationToken);
+        => await _transactions.AddAsync(aggregate, cancellationToken);
 
 
    

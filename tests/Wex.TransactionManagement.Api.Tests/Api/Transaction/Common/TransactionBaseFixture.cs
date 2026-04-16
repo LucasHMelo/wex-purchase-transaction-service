@@ -31,6 +31,19 @@ public class TransactionBaseFixture
         return transactionDescription;
     }
 
+    public string GetInvalidDescriptionTooLong()
+    {
+        var tooLongDescriptionForTransaction = Faker.Commerce.ProductDescription();
+        while (tooLongDescriptionForTransaction.Length <= 50)
+            tooLongDescriptionForTransaction = $"{tooLongDescriptionForTransaction} {Faker.Commerce.ProductDescription()}";
+        return tooLongDescriptionForTransaction;
+    }
+
+    public decimal GetInvalidValue()
+    {
+        return -1;
+    }
+
     public DateTime GetValidTransactionDate()
     {
         return DateTime.UtcNow;

@@ -1,16 +1,16 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
+using Wex.TransactionManager.Domain.Entities;
+using Wex.TransactionManager.Domain.Repositories;
 
 namespace Wex.TransactionManager.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController : ControllerBase
+    public class TransactionController(ITransactionRepository mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public TransactionController(IMediator mediator)
-            => _mediator = mediator;
+        private readonly ITransactionRepository _mediator = mediator;
 
         [HttpPost]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
@@ -21,11 +21,16 @@ namespace Wex.TransactionManager.Api.Controllers
             CancellationToken cancellationToken
         )
         {
-            var output = await _mediator.Send(input, cancellationToken);
+
+            Transaction t = new Transaction(input.Description,
+                input.Amount,
+                input.TransactionDate);
+
+            await _mediator.Insert(t, cancellationToken);
             return CreatedAtAction(
                 nameof(Create),
-                new { output.Id },
-                output
+                new { test = "Guid" },
+                Guid.NewGuid
             );
         }
     }
