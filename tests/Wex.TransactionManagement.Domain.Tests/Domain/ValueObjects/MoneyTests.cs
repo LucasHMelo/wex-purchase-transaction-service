@@ -1,7 +1,7 @@
 using Wex.TransactionManager.Domain.Exceptions;
 using Wex.TransactionManager.Domain.ValueObjects;
 
-namespace Wex.TransactionManagement.Domain.Tests.ValueObjects;
+namespace Wex.TransactionManagement.UnitTests.Domain.ValueObjects;
 
 public class MoneyTests
 {

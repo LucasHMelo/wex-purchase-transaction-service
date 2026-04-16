@@ -3,7 +3,7 @@ using DomainEntity = Wex.TransactionManager.Domain.Transaction;
 using Wex.TransactionManager.Domain.Exceptions;
 using Shouldly;
 
-namespace Wex.TransactionManagement.Domain.Tests.Transaction;
+namespace Wex.TransactionManagement.UnitTests.Domain.Transaction;
 
 [Collection(nameof(TransactionTestFixture))]
 public class TransactionTests

@@ -1,7 +1,7 @@
-using Wex.TransactionManagement.Domain.Tests.Common;
+using Wex.TransactionManagement.UnitTests.Common;
 using DomainEntity = Wex.TransactionManager.Domain.Transaction;
 
-namespace Wex.TransactionManagement.Domain.Tests.Transaction;
+namespace Wex.TransactionManagement.UnitTests.Domain.Transaction;
 
 public class TransactionTestFixture : BaseFixture
 {
@@ -15,12 +15,12 @@ public class TransactionTestFixture : BaseFixture
 
     public string GetValidTransactionDescription()
     {
-        var categoryDescription =
+        var transactionDescription =
             Faker.Commerce.ProductDescription();
-        if (categoryDescription.Length > 50)
-            categoryDescription =
-                categoryDescription[..50];
-        return categoryDescription;
+        if (transactionDescription.Length > 50)
+            transactionDescription =
+                transactionDescription[..50];
+        return transactionDescription;
     }
 
     public DomainEntity.Transaction GetValidTransaction()
@@ -32,6 +32,6 @@ public class TransactionTestFixture : BaseFixture
 }
 
 [CollectionDefinition(nameof(TransactionTestFixture))]
-public class CategoryTestFixtureCollection
+public class TransactionTestFixtureCollection
     : ICollectionFixture<TransactionTestFixture>
 { }

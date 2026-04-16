@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Repositories\" />
     <Folder Include="SeedWork\" />
     <Folder Include="Validation\" />
     <Folder Include="Exceptions\" />

@@ -1,6 +1,6 @@
 using Bogus;
 
-namespace Wex.TransactionManagement.Domain.Tests.Common;
+namespace Wex.TransactionManagement.UnitTests.Common;
 
 public abstract class BaseFixture
 {

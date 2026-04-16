@@ -27,14 +27,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
-    <Folder Include="Transaction\" />
-    <Folder Include="Validation\" />
-    <Folder Include="ValueObjects\" />
+    <ProjectReference Include="..\..\src\Wex.TransactionManager.Application\Wex.TransactionManager.Application.csproj" />
+    <ProjectReference Include="..\..\src\Wex.TransactionManager.Domain\Wex.TransactionManager.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Wex.TransactionManager.Domain\Wex.TransactionManager.Domain.csproj" />
+    <Folder Include="Application\" />
+    <Folder Include="Application\Transaction\" />
+    <Folder Include="Application\Transaction\CreateTransaction\" />
   </ItemGroup>
 
 </Project>

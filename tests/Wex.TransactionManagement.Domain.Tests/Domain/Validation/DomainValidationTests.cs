@@ -3,7 +3,7 @@ using Shouldly;
 using Wex.TransactionManager.Domain.Exceptions;
 using Wex.TransactionManager.Domain.Validation;
 
-namespace Wex.TransactionManagement.Domain.Tests.Validation;
+namespace Wex.TransactionManagement.UnitTests.Domain.Validation;
 
 public class DomainValidationTests
 {

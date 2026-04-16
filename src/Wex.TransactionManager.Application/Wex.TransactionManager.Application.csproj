@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wex.TransactionManager.Domain\Wex.TransactionManager.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
