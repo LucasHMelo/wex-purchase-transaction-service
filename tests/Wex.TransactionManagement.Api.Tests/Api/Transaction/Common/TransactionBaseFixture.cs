@@ -6,6 +6,16 @@ namespace Wex.TransactionManagement.E2ETests.Api.Transaction.Common;
 public class TransactionBaseFixture
     : BaseFixture
 {
+    public TransactionPersistence Persistence;
+
+    public TransactionBaseFixture()
+        : base()
+    {
+        Persistence = new TransactionPersistence(
+            CreateDbContext()
+        );
+    }
+
     public decimal GetValidTransactionAmount()
     {
         return Faker.Random.Number(9999);
