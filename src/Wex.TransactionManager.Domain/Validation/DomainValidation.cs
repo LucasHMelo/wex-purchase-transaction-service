@@ -26,7 +26,7 @@ public class DomainValidation
 
     public static void ValideDateTime(DateTime target, string fieldName)
     {
-        if (target != default)
+        if (target == default)
             throw new EntityValidationException($"{fieldName} should not be default");
     }
 }

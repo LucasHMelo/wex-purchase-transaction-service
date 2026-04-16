@@ -56,7 +56,7 @@ public class TransactionTests
     {
         // Arrange 
         var validData = _transactionTestFixture.GetValidTransaction();
-        var datetimeBefore = DateTime.UtcNow;
+        var datetimeBefore = DateTime.UtcNow.AddSeconds(-1);
         // Act
         var transaction = new DomainEntity.Transaction(validData.Description, amount, DateTime.UtcNow);
         var datetimeAfter = DateTime.UtcNow.AddSeconds(1);

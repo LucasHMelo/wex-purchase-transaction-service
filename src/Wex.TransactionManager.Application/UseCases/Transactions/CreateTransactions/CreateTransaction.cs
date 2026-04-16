@@ -1,5 +1,5 @@
 using Wex.TransactionManager.Application.Interfaces;
-using Wex.TransactionManager.Domain.Entities;
+using DomainEntity = Wex.TransactionManager.Domain.Entities;
 using Wex.TransactionManager.Domain.Repositories;
 
 namespace Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
@@ -16,7 +16,7 @@ public class CreateTransaction(
         CreateTransactionInput input, 
         CancellationToken cancellationToken)
     {
-        var transaction = new Transaction(
+        var transaction = new DomainEntity.Transaction(
             input.Description,
             input.Amount,
             input.TransactionDate

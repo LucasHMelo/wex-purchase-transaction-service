@@ -17,14 +17,6 @@ public sealed record Money
 
     public override string ToString() => $"{Currency} {Value:N2}";
 
-    public static Money Zero(string currency = "USD")
-    {
-        if (string.IsNullOrWhiteSpace(currency))
-            throw new ArgumentException("Currency is required", nameof(currency));
-
-        return new Money(0, currency.ToUpperInvariant());
-    }
-
     public static Money Create(decimal value, string currency = "USD")
     {
         if (value <= 0)

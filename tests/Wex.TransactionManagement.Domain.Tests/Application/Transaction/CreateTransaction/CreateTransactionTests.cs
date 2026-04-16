@@ -30,7 +30,7 @@ public class CreateTransactionTests
 
         var output = await useCase.HandleAsync(input, CancellationToken.None);
 
-        repositoryMock.Received(1).CreateTransaction(
+        repositoryMock.Received(1).Insert(
             Arg.Any<DomainEntity.Transaction>(),
             Arg.Any<CancellationToken>()
         );

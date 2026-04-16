@@ -25,11 +25,7 @@ public class TransactionTestFixture : BaseFixture
 
     public DateTime GetValidTransactionDate()
     {
-        var transactionDate =
-            Faker.Date.Random.String();
-        if (transactionDate == default)
-            return DateTime.UtcNow;
-        return DateTime.Parse(transactionDate);
+        return DateTime.UtcNow;
     }
 
     public TransactionManager.Domain.Entities.Transaction GetValidTransaction()
