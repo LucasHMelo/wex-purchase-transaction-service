@@ -23,4 +23,10 @@ public class DomainValidation
         if (target.Length > maxLength)
             throw new EntityValidationException($"{fieldName} should be less or equal {maxLength} characters long");
     }
+
+    public static void ValideDateTime(DateTime target, string fieldName)
+    {
+        if (target != default)
+            throw new EntityValidationException($"{fieldName} should not be default");
+    }
 }

@@ -1,5 +1,5 @@
 using Wex.TransactionManagement.UnitTests.Common;
-using DomainEntity = Wex.TransactionManager.Domain.Transaction;
+using DomainEntity = Wex.TransactionManager.Domain.Entities;
 
 namespace Wex.TransactionManagement.UnitTests.Domain.Transaction;
 
@@ -23,10 +23,20 @@ public class TransactionTestFixture : BaseFixture
         return transactionDescription;
     }
 
+    public DateTime GetValidTransactionDate()
+    {
+        var transactionDate =
+            Faker.Date.Random.String();
+        if (transactionDate == default)
+            return DateTime.UtcNow;
+        return DateTime.Parse(transactionDate);
+    }
+
     public TransactionManager.Domain.Entities.Transaction GetValidTransaction()
         => new (
             GetValidTransactionDescription(),
-            GetValidTransactionAmount()
+            GetValidTransactionAmount(),
+            GetValidTransactionDate()
         );
 
 }

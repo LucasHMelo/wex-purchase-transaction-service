@@ -1,5 +1,5 @@
 
-using DomainEntity = Wex.TransactionManager.Domain.Transaction;
+using DomainEntity = Wex.TransactionManager.Domain.Entities;
 using Wex.TransactionManager.Domain.Exceptions;
 using Shouldly;
 
@@ -29,7 +29,10 @@ public class TransactionTests
         var datetimeBefore = DateTime.UtcNow;
 
         // Act
-        var transaction = new DomainEntity.Transaction(validData.Description, validData.Amount.Value);
+        var transaction = new DomainEntity
+            .Transaction(validData.Description, 
+                         validData.Amount.Value,
+                         validData.TransactionDate);
         var datetimeAfter = DateTime.UtcNow.AddSeconds(1);
 
         // Asert
@@ -38,6 +41,7 @@ public class TransactionTests
         transaction.Description.ShouldBeEquivalentTo(validData.Description);
         transaction.Amount.Value.ShouldBe(validData.Amount.Value);
         transaction.Id.ShouldNotBe(default(Guid));
+        transaction.TransactionDate.ShouldNotBe(default(DateTime));
         transaction.CreatedAt.ShouldNotBe(default(DateTime));
         transaction.CreatedAt.ShouldBeGreaterThan(datetimeBefore);
         transaction.CreatedAt.ShouldBeLessThan(datetimeAfter);
@@ -54,7 +58,7 @@ public class TransactionTests
         var validData = _transactionTestFixture.GetValidTransaction();
         var datetimeBefore = DateTime.UtcNow;
         // Act
-        var transaction = new DomainEntity.Transaction(validData.Description, amount);
+        var transaction = new DomainEntity.Transaction(validData.Description, amount, DateTime.UtcNow);
         var datetimeAfter = DateTime.UtcNow.AddSeconds(1);
 
         // Asert
@@ -76,7 +80,7 @@ public class TransactionTests
     public void InstantiateErrorWhenDescriptionIsNull(string? description)
     {
         Action action =
-            () => new DomainEntity.Transaction(description!, 100);
+            () => new DomainEntity.Transaction(description!, 100, DateTime.UtcNow);
         var exception = Assert.Throws<EntityValidationException>(action);
         exception.Message.ShouldBeEquivalentTo("Description should not be null");
     }
@@ -87,7 +91,7 @@ public class TransactionTests
     {
         var invalidDescription = String.Join(null, Enumerable.Range(1, 51).Select(_ => "a").ToArray());
         Action action =
-            () => new DomainEntity.Transaction(invalidDescription, 100);
+            () => new DomainEntity.Transaction(invalidDescription, 100, DateTime.UtcNow);
         var exception = Should.Throw<EntityValidationException>(action);
         exception.Message.ShouldBeEquivalentTo("Description should be less or equal 50 characters long");
     }
@@ -99,7 +103,7 @@ public class TransactionTests
     public void InstantiateErrorWhenAmountIsInvalid(decimal amount)
     {
         Action action =
-            () => new DomainEntity.Transaction("Description", amount);
+            () => new DomainEntity.Transaction("Description", amount, DateTime.UtcNow);
         var exception = Should.Throw<EntityValidationException>(action);
         exception.Message.ShouldBeEquivalentTo("Value must be positive");
     }

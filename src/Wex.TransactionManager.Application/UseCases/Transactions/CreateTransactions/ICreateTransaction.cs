@@ -2,5 +2,5 @@ namespace Wex.TransactionManager.Application.UseCases.Transactions.CreateTransac
 
 public interface ICreateTransaction
 {
-    Task<object> CreateTransaction(CreateTransactionInput transaction);
+    Task<Guid> HandleAsync(CreateTransactionInput transaction, CancellationToken cancellationToken);
 }
