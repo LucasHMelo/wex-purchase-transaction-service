@@ -6,4 +6,21 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Configurations\" />
+    <Folder Include="Data\" />
+    <Folder Include="Data\DbContexts\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wex.TransactionManager.Application\Wex.TransactionManager.Application.csproj" />
+    <ProjectReference Include="..\Wex.TransactionManager.Domain\Wex.TransactionManager.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

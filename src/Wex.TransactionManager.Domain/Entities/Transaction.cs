@@ -27,4 +27,6 @@ public class Transaction : AggregateRoot
         DomainValidation.MaxLength(Description, 50, nameof(Description));
         DomainValidation.ValideDateTime(TransactionDate, nameof(TransactionDate));
     }
+
+    private Transaction() { } 
 }

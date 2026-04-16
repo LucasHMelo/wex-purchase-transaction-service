@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Wex.TransactionManagement.IntegrationTests.Base;
 using Wex.TransactionManager.Domain.Entities;
+using Wex.TransactionManager.Infrastructure.Data.DbContexts;
 
 namespace Wex.TransactionManagement.IntegrationTests.Infra.Data.EF.Repositories.TransactionRepository;
 
@@ -38,7 +39,7 @@ public class TransactionRepositoryTestFixture
     
      public WexTransactionDbContext CreateDbContext()
     {
-        var dbContext = new WexTransactionDbContext(
+        return new WexTransactionDbContext(
             new DbContextOptionsBuilder<WexTransactionDbContext>()
             .UseInMemoryDatabase("integration-tests-db")
             .Options
