@@ -1,7 +1,9 @@
 using System;
 using System.Threading;
 using NSubstitute;
+using Wex.TransactionManager.Application.Interfaces;
 using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
+using Wex.TransactionManager.Domain.Repositories;
 using UseCases = Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
 
 namespace Wex.TransactionManagement.UnitTests.Application.Transaction.CreateTransaction;

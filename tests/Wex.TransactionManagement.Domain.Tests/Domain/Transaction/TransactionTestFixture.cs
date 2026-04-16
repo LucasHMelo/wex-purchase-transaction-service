@@ -23,7 +23,7 @@ public class TransactionTestFixture : BaseFixture
         return transactionDescription;
     }
 
-    public DomainEntity.Transaction GetValidTransaction()
+    public TransactionManager.Domain.Entities.Transaction GetValidTransaction()
         => new (
             GetValidTransactionDescription(),
             GetValidTransactionAmount()

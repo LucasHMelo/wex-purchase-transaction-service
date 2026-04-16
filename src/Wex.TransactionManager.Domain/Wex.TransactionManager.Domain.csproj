@@ -11,7 +11,7 @@
     <Folder Include="SeedWork\" />
     <Folder Include="Validation\" />
     <Folder Include="Exceptions\" />
-    <Folder Include="Transaction\" />
+    <Folder Include="Entities\" />
     <Folder Include="ValueObjects\" />
   </ItemGroup>
 

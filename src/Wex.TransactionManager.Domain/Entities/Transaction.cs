@@ -1,10 +1,8 @@
-using System.Net.Http.Headers;
-using Wex.TransactionManager.Domain.Exceptions;
 using Wex.TransactionManager.Domain.SeedWork;
 using Wex.TransactionManager.Domain.Validation;
 using Wex.TransactionManager.Domain.ValueObjects;
 
-namespace Wex.TransactionManager.Domain.Transaction;
+namespace Wex.TransactionManager.Domain.Entities;
 
 public class Transaction : AggregateRoot
 {
