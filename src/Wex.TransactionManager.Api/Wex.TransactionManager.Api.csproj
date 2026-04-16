@@ -11,10 +11,17 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Configurations\" />
     <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wex.TransactionManager.Application\Wex.TransactionManager.Application.csproj" />
+    <ProjectReference Include="..\Wex.TransactionManager.Infrastructure\Wex.TransactionManager.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
