@@ -8,14 +8,17 @@ using Shouldly;
 
 namespace Wex.TransactionManagement.UnitTests.Application.Transaction.CreateTransaction;
 
-public class CreateTransactionTests
+[Collection(nameof(CreateTransactionTestFixture))]
+public class CreateTransactionTests(CreateTransactionTestFixture fixture)
 {
+    private readonly CreateTransactionTestFixture _fixture = fixture;
+
     [Fact(DisplayName = nameof(CreateTransaction))]
     [Trait("Application", "CreateTransaction - Use Cases")]
     public async void CreateTransaction()
     {
-        var repositoryMock = Substitute.For<ITransactionRepository>();
-        var unitOfWorkMock = Substitute.For<IUnitOfWork>();
+        var repositoryMock =  _fixture.GetRepositoryMock();
+        var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
         var useCase = new UseCases.CreateTransaction(
             repositoryMock,
             unitOfWorkMock
