@@ -29,8 +29,8 @@ namespace Wex.TransactionManager.Api.Controllers
             await _mediator.Insert(t, cancellationToken);
             return CreatedAtAction(
                 nameof(Create),
-                new { test = "Guid" },
-                Guid.NewGuid
+                new { Id = Guid.NewGuid() },
+                new { Id = Guid.NewGuid() }
             );
         }
     }

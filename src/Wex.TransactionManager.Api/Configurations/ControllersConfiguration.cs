@@ -1,3 +1,5 @@
+using Wex.TransactionManager.Api.Filters;
+
 namespace Wex.TransactionManager.Api.Configurations;
 
 public static class ControllersConfiguration
@@ -6,7 +8,9 @@ public static class ControllersConfiguration
         this IServiceCollection services
     )
     {
-        services.AddControllers();
+        services.AddControllers(options 
+            => options.Filters.Add(typeof(ApiGlobalExceptionFilter))
+        );
         services.AddDocumentation();
         return services;
     }

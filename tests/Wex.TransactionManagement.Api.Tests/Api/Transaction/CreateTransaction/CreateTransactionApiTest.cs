@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
@@ -23,10 +24,10 @@ public class CreateTransactionApiTest(CreateTransactionApiTestFixture fixture)
                 input
             );
 
-        output.ShouldNotBe(default);
-        output.ShouldNotBe("");
+        output.GetProperty("id").ShouldNotBe(default);
+        output.GetProperty("id").ToString().ShouldNotBe("");
         DomainEntity.Transaction dbTransaction = await _fixture.Persistence
-            .GetById(output);
+            .GetById(output.GetProperty("id").ToString());
         dbTransaction.ShouldNotBeNull();
         dbTransaction.Amount.Value.ShouldBeEquivalentTo(input.Amount);
         dbTransaction.Description.ShouldBeEquivalentTo(input.Description);
@@ -46,7 +47,7 @@ public class CreateTransactionApiTest(CreateTransactionApiTestFixture fixture)
     ){
         var (response, output) = await _fixture.
             ApiClient.Post<ProblemDetails>(
-                "/api//transaction",
+                "/api/transaction",
                 input
             );
 
@@ -54,7 +55,7 @@ public class CreateTransactionApiTest(CreateTransactionApiTestFixture fixture)
         response!.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
         output.ShouldNotBeNull();
         output!.Title.ShouldBe("One or more validation errors ocurred");
-        output.Type.ShouldBe("UnprocessableEntity");
+        output.Status.ShouldBe((int)StatusCodes.Status422UnprocessableEntity);
         output.Status.ShouldBe((int)HttpStatusCode.UnprocessableEntity);
         output.Detail.ShouldBe(expectedDetail);
     }

@@ -32,7 +32,7 @@ public class ApiClient(HttpClient httpClient)
         return (response, output);
     }
 
-    public async Task<(HttpResponseMessage?, string)> Post(
+    public async Task<(HttpResponseMessage?, JsonElement)> Post(
         string route,
         object payload
     )
@@ -46,6 +46,11 @@ public class ApiClient(HttpClient httpClient)
             )
         );
         var outputString = await response.Content.ReadAsStringAsync();
-        return (response, outputString);
+        var output = JsonSerializer.Deserialize<JsonElement>(outputString,
+                new JsonSerializerOptions { 
+                    PropertyNameCaseInsensitive = true
+                }
+            );
+        return (response, output);
     }
 }
