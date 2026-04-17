@@ -20,10 +20,11 @@ public static class ConnectionsConfiguration
         var connectionString = configuration
             .GetConnectionString("TransactionDb");
         services.AddDbContext<WexTransactionDbContext>(
-            options => options.UseNpgsql(
+            options => options.UseNpgsql( 
                 connectionString
             )
         );
+
         return services;
     }
 }
