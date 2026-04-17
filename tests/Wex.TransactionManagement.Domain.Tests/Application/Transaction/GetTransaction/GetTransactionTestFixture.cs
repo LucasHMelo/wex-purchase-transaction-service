@@ -6,6 +6,10 @@ using DomainEntity = Wex.TransactionManager.Domain.Entities;
 
 namespace Wex.TransactionManagement.UnitTests.Application.Transaction.GetTransaction;
 
+[CollectionDefinition(nameof(GetTransactionTestFixture))]
+public class GetTransactionTestFixtureCollection :
+    ICollectionFixture<GetTransactionTestFixture> {}
+    
 public class GetTransactionTestFixture : BaseFixture
 {
     public decimal GetValidTransactionAmount()
