@@ -31,4 +31,8 @@
     <ProjectReference Include="..\..\src\Wex.TransactionManager.Domain\Wex.TransactionManager.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Transaction\GetTransaction\" />
+  </ItemGroup>
+
 </Project>
