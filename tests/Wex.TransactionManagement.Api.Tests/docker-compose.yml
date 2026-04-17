@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  wex.transaction.fb:
+    container_name: transaction_e2e
+    hostname: transaction_e2e
+    image: postgres
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: transaction_e2e
+    volumes:
+      - transactiondb_data:/var/lib/postgresql/data
+    networks:
+      - transaction_network
+
+volumes:
+  transactiondb_data:
+
+networks:
+  transaction_network:
+    driver: bridge

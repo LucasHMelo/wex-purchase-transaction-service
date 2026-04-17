@@ -14,20 +14,17 @@ public class CustomWebApplicationFactory<TStartup>
         IWebHostBuilder builder
     )
     {
+        builder.UseEnvironment("E2ETest");
         builder.ConfigureServices(services => {
-            var dbOptions = services.FirstOrDefault(
-                x => x.ServiceType == typeof(
-                    DbContextOptions<WexTransactionDbContext>
-                )
-            );
-            if(dbOptions is not null)
-                services.Remove(dbOptions);
-            services.AddDbContext<WexTransactionDbContext>(
-                options => {
-                    options.UseInMemoryDatabase("end2end-tests-db");
-                }
-            );
+            var serviceProvider = services.BuildServiceProvider();
+            using var scope = serviceProvider.CreateScope();
+            var context = scope.ServiceProvider
+                .GetService<WexTransactionDbContext>();
+            ArgumentNullException.ThrowIfNull(context);
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
         });
+        
 
         base.ConfigureWebHost(builder);
     }

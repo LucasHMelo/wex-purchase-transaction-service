@@ -1,6 +1,7 @@
 using System;
 using Bogus;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Wex.TransactionManager.Infrastructure.Data.DbContexts;
 
@@ -11,6 +12,7 @@ public class BaseFixture
     public ApiClient ApiClient { get; set; }
     public CustomWebApplicationFactory<Program> WebAppFactory { get; set; }
     public HttpClient HttpClient { get; set; }
+    private readonly string _dbConnectionString;
 
     public BaseFixture()
     {
@@ -18,6 +20,11 @@ public class BaseFixture
         WebAppFactory = new CustomWebApplicationFactory<Program>();
         HttpClient = WebAppFactory.CreateClient();
         ApiClient = new ApiClient(HttpClient);
+        var configuration = WebAppFactory.Services
+            .GetService(typeof(IConfiguration));
+        ArgumentNullException.ThrowIfNull(configuration);
+        _dbConnectionString = ((IConfiguration)configuration)
+            .GetConnectionString("TransactionDb");
     }
 
     protected Faker Faker { get; set; }
@@ -26,7 +33,9 @@ public class BaseFixture
     {
         var context = new WexTransactionDbContext(
             new DbContextOptionsBuilder<WexTransactionDbContext>()
-            .UseInMemoryDatabase("end2end-tests-db")
+            .UseNpgsql(
+                _dbConnectionString
+            )
             .Options
         );
         return context;

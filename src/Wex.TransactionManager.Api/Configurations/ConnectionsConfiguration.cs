@@ -6,18 +6,22 @@ namespace Wex.TransactionManager.Api.Configurations;
 public static class ConnectionsConfiguration
 {
     public static IServiceCollection AddAppConections(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        services.AddDbConnection();
+        services.AddDbConnection(configuration);
         return services;
     }
 
     private static IServiceCollection AddDbConnection(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
+        var connectionString = configuration
+            .GetConnectionString("TransactionDb");
         services.AddDbContext<WexTransactionDbContext>(
-            options => options.UseInMemoryDatabase(
-                "InMemory-Wex-Database"
+            options => options.UseNpgsql(
+                connectionString
             )
         );
         return services;

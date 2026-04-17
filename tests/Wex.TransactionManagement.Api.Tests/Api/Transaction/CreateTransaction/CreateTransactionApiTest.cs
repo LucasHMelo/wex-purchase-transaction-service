@@ -31,7 +31,7 @@ public class CreateTransactionApiTest(CreateTransactionApiTestFixture fixture)
         dbTransaction.ShouldNotBeNull();
         dbTransaction.Amount.Value.ShouldBeEquivalentTo(input.Amount);
         dbTransaction.Description.ShouldBeEquivalentTo(input.Description);
-        dbTransaction.TransactionDate.ShouldBeEquivalentTo(input.TransactionDate);
+        dbTransaction.TransactionDate.ShouldBe(input.TransactionDate, TimeSpan.FromMilliseconds(1));
         dbTransaction.Id.ShouldNotBe(default);
     }
 
