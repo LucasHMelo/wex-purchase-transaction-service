@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Wex.TransactionManager.Application.Services;
 using Wex.TransactionManager.Domain.Repositories;
 using Wex.TransactionManager.Domain.ValueObjects;
@@ -6,21 +7,31 @@ using Wex.TransactionManager.Domain.ValueObjects;
 namespace Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
 
 public class GetTransaction(ITransactionRepository TransactionRepository,
-    IExchangeRateService exchangeRateService)
+    IExchangeRateService exchangeRateService,
+    ILogger<GetTransaction> logger)
     : IGetTransaction
 {
     private readonly ITransactionRepository _transactionRepository = TransactionRepository;
     private readonly IExchangeRateService _exchangeRateService = exchangeRateService;
+    private readonly ILogger<GetTransaction> _logger = logger;
+
     public async Task<GetTransactionOutput> Handle(
         GetTransactionInput request,
         CancellationToken cancellationToken
     )
     {
-        var transaction = await _transactionRepository.Get(request.Id, cancellationToken) 
-            ?? throw new KeyNotFoundException($"Transaction with ID {request.Id} not found");
+        var transaction = await _transactionRepository.Get(request.Id, cancellationToken);
+        if (transaction == null)
+        {
+            _logger.LogWarning("Transaction with ID {TransactionId} not found", request.Id);
+            throw new KeyNotFoundException($"Transaction with ID {request.Id} not found");
+        }
 
         if (request.TargetCurrency == transaction.Amount.Currency)
         {
+            _logger.LogInformation("Target currency {TargetCurrency} is same as original currency {OriginalCurrency}", 
+                request.TargetCurrency, transaction.Amount.Currency);
+
             return GetTransactionOutput.FromSameCurrencyTransaction(transaction);
         }
 
@@ -30,6 +41,15 @@ public class GetTransaction(ITransactionRepository TransactionRepository,
             cancellationToken);
 
         var convertedAmount = ConvertAmount(transaction.Amount, exchangeRateResult.Rate, request.TargetCurrency);
+
+        _logger.LogInformation("Converted Transaction {TransactionId}: {OriginalAmount} {OriginalCurrency} = {ConvertedAmount} {TargetCurrency} (rate: {ExchangeRate} from {RateDate})",
+            transaction.Id,
+            transaction.Amount.Value,
+            transaction.Amount.Currency,
+            convertedAmount.Value,
+            request.TargetCurrency,
+            exchangeRateResult.Rate,
+            exchangeRateResult.RateDate);
 
         return GetTransactionOutput.FromTransaction(transaction, convertedAmount, exchangeRateResult);
     }
@@ -47,7 +67,7 @@ public class GetTransaction(ITransactionRepository TransactionRepository,
         }
         else
         {
-            throw new NotSupportedException("Direct conversion between non-USD currencies is not supported. Please convert to USD first, then to the target currency.");
+            throw new NotSupportedException("This convertion is not supported.");
         }
 
         return Money.Create(convertedAmount, targetCurrency);

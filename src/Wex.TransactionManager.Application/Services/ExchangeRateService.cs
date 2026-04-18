@@ -1,18 +1,16 @@
 
+using Microsoft.Extensions.Logging;
 using Wex.TransactionManager.Application.DTOs;
 using Wex.TransactionManager.Application.Interfaces;
 
 namespace Wex.TransactionManager.Application.Services;
 
-public class ExchangeRateService : IExchangeRateService
+public class ExchangeRateService(
+    ITreasuryApiClient treasuryApiClient,
+    ILogger<ExchangeRateService> logger) : IExchangeRateService
 {
-    private readonly ITreasuryApiClient _treasuryApiClient;
-
-    public ExchangeRateService(
-        ITreasuryApiClient treasuryApiClient)
-    {
-        _treasuryApiClient = treasuryApiClient;
-    }
+    private readonly ITreasuryApiClient _treasuryApiClient = treasuryApiClient;
+    private readonly ILogger<ExchangeRateService> _logger = logger;
 
     public async Task<ExchangeRateResult> GetExchangeRateWithDateAsync(string currency, DateTime date, CancellationToken cancellationToken = default)
     {
@@ -21,7 +19,7 @@ public class ExchangeRateService : IExchangeRateService
 
         // if (requestedDate == today)
         // {
-            
+            // _logger.LogInformation("Fetching current day rate for {Currency} on {Date} (no cache)", currency, requestedDate);
         //     var rate = await _treasuryApiClient.GetExchangeRateAsync(currency, requestedDate, cancellationToken);
             
         //     if (!rate.HasValue)
@@ -34,7 +32,7 @@ public class ExchangeRateService : IExchangeRateService
 
         var sixMonthsAgo = today.AddMonths(-6);
         var startDate = requestedDate < sixMonthsAgo ? requestedDate : sixMonthsAgo;
-
+             _logger.LogInformation("Fetching exchange rates bucket for {Currency} from {StartDate}", currency, startDate);
         var ratesFromApi = await _treasuryApiClient.GetExchangeRatesRangeAsync(currency, startDate, cancellationToken);
 
         var finalRateResult = FindRateInBucketWithDate(ratesFromApi, requestedDate);
@@ -42,7 +40,8 @@ public class ExchangeRateService : IExchangeRateService
         {
             throw new Exception(currency);
         }
-        
+        _logger.LogInformation("Retrieved and cached exchange rate bucket for {Currency} with {Count} rates", 
+            currency, ratesFromApi.Count);
         
         return finalRateResult;
     }

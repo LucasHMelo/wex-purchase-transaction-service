@@ -1,8 +1,20 @@
+using Serilog;
 using Wex.TransactionManager.Api.Configurations;
 using Wex.TransactionManager.Application.Interfaces;
 using Wex.TransactionManager.Infrastructure.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration
+        .MinimumLevel.Information()
+        .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+        .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning)
+        .MinimumLevel.Override("Microsoft.Hosting.Lifetime", Serilog.Events.LogEventLevel.Information)
+        .Enrich.FromLogContext()
+        .Enrich.WithThreadId()
+        .WriteTo.Console(
+            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {SourceContext}: {Message:lj} {Properties:j}{NewLine}{Exception}"));
 
 // Add services to the container.
 builder.Services.AddHttpClient<ITreasuryApiClient, TreasuryApiClient>(client =>

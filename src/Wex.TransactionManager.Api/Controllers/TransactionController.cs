@@ -2,16 +2,15 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
 using Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
-using Wex.TransactionManager.Domain.Entities;
-using Wex.TransactionManager.Domain.Repositories;
 
 namespace Wex.TransactionManager.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController(IMediator mediator) : ControllerBase
+    public class TransactionController(IMediator mediator, ILogger<TransactionController> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+         private readonly ILogger<TransactionController> _logger = logger;
 
         [HttpPost]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
@@ -39,6 +38,8 @@ namespace Wex.TransactionManager.Api.Controllers
             [FromQuery] string currency = "Brazil-Real"
         )
         {
+            _logger.LogInformation("Retrieving Transaction {TransactionId} with currency conversion to {TargetCurrency}", id, currency);
+            
             var output = await _mediator.Send(new GetTransactionInput(id, currency), cancellationToken);
             return Ok(output);
         }

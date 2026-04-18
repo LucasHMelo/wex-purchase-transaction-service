@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using Wex.TransactionManager.Application.DTOs;
 using Wex.TransactionManager.Application.Interfaces;
 using Wex.TransactionManager.Infrastructure.Clients.Models;
@@ -10,10 +11,12 @@ namespace Wex.TransactionManager.Infrastructure.Clients;
 public class TreasuryApiClient : ITreasuryApiClient
 {
     private readonly HttpClient _httpClient;
+    private readonly ILogger<TreasuryApiClient> _logger;
     
-    public TreasuryApiClient(HttpClient httpClient)
+    public TreasuryApiClient(HttpClient httpClient, ILogger<TreasuryApiClient> logger)
     {
         _httpClient = httpClient;
+        _logger = logger;
         
         _httpClient.BaseAddress = new Uri("https://api.fiscaldata.treasury.gov");
         _httpClient.DefaultRequestHeaders.Add("User-Agent", "Wex-Transaction");
@@ -35,12 +38,18 @@ public class TreasuryApiClient : ITreasuryApiClient
                            $"&page[size]=1";
 
             var fullUrl = $"{_httpClient.BaseAddress}{requestUrl}";
+            _logger.LogInformation("Calling Treasury API: {FullUrl}", fullUrl);
 
             var response = await _httpClient.GetAsync(requestUrl, cancellationToken);
+
+            _logger.LogInformation("Treasury API response status: {StatusCode}", response.StatusCode);
 
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            _logger.LogInformation("Treasury API response content: {Content}", content);
+
             var treasuryResponse = JsonSerializer.Deserialize<TreasuryApiResponse>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
@@ -56,6 +65,16 @@ public class TreasuryApiClient : ITreasuryApiClient
                     rate = parsedRate;
                 }
             }
+
+            if (rate.HasValue)
+            {
+                _logger.LogInformation("Retrieved exchange rate {Rate} for {Currency} on {Date}", rate.Value, currency, date);
+            }
+            else
+            {
+                _logger.LogWarning("No exchange rate found for {Currency} on {Date}", currency, date);
+            }
+
             return rate;
         }
         catch (Exception ex)
@@ -96,6 +115,9 @@ public class TreasuryApiClient : ITreasuryApiClient
                     RecordDate = DateTime.Parse(d.RecordDate)
                 })
                 .ToList() ?? new List<ExchangeRateDto>();
+
+            _logger.LogInformation("Retrieved {Count} exchange rates for {Currency} from {StartDate}", 
+                rates.Count, currency, startDate);
 
             return rates;
         }
