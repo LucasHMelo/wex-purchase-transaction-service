@@ -1,5 +1,5 @@
-using System;
 using Wex.TransactionManagement.E2ETests.Base;
+using DomainEntity = Wex.TransactionManager.Domain.Entities;
 
 namespace Wex.TransactionManagement.E2ETests.Api.Transaction.Common;
 
@@ -43,6 +43,22 @@ public class TransactionBaseFixture
     {
         return -1;
     }
+
+    public DomainEntity.Transaction GetExampleTransaction()
+        => new(
+            GetValidTransactionDescription(),
+            GetValidTransactionAmount(),
+            GetValidTransactionDate()
+        );
+
+    public List<DomainEntity.Transaction> GetExampleTransactionsList(int listLength = 15)
+        => Enumerable.Range(1, listLength).Select(
+            _ => new DomainEntity.Transaction(
+                GetValidTransactionDescription(),
+                GetValidTransactionAmount(),
+                GetValidTransactionDate()
+            )
+        ).ToList();
 
     public DateTime GetValidTransactionDate()
     {

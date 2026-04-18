@@ -13,7 +13,7 @@ public class CreateTransactionApiTest(CreateTransactionApiTestFixture fixture)
     private readonly CreateTransactionApiTestFixture _fixture = fixture;
 
     [Fact(DisplayName = nameof(CreateTransaction))]
-    [Trait("EndToEnd/API", "Transaction - Endpoints")]
+    [Trait("EndToEnd/API", "Transaction/Create - Endpoints")]
     public async Task CreateTransaction()
     {
         var input = _fixture.getExampleInput();
@@ -36,7 +36,7 @@ public class CreateTransactionApiTest(CreateTransactionApiTestFixture fixture)
     }
 
     [Theory(DisplayName = nameof(ThrowWhenCantInstantiateAggregate))]
-    [Trait("EndToEnd/API", "Transaction - Endpoints")]
+    [Trait("EndToEnd/API", "Transaction/Create - Endpoints")]
     [MemberData(
         nameof(CreateTransactionApiTestDataGenerator.GetInvalidInputs),
         MemberType = typeof(CreateTransactionApiTestDataGenerator)

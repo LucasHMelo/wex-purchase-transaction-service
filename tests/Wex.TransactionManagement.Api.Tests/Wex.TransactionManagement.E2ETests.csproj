@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="Api\Transaction\Common\" />
+    <Folder Include="Api\Transaction\GetTransaction\" />
     <Folder Include="Base\" />
   </ItemGroup>
 

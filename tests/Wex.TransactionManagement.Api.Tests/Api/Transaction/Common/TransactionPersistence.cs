@@ -12,4 +12,10 @@ public class TransactionPersistence(WexTransactionDbContext context)
         => await _context
             .Transactions.AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
+
+    public async Task InsertList(List<DomainEntity.Transaction> transaction)
+    {
+        await _context.Transactions.AddRangeAsync(transaction);
+        await _context.SaveChangesAsync();
+    }
 }
