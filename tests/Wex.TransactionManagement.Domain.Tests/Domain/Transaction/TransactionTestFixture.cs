@@ -28,11 +28,17 @@ public class TransactionTestFixture : BaseFixture
         return DateTime.UtcNow;
     }
 
+    public string GetValidTransactionIdempotencyKey()
+    {
+        return Guid.NewGuid().ToString();
+    }
+
     public TransactionManager.Domain.Entities.Transaction GetValidTransaction()
         => new (
             GetValidTransactionDescription(),
             GetValidTransactionAmount(),
-            GetValidTransactionDate()
+            GetValidTransactionDate(),
+            GetValidTransactionIdempotencyKey()
         );
 
 }

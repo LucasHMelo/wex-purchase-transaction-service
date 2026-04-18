@@ -10,13 +10,19 @@ public class Transaction : AggregateRoot
     public Money Amount { get; private set; }
     public DateTime TransactionDate { get; private set; } 
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    public string? IdempotencyKey { get; private set; }
 
-    public Transaction(string description, decimal amount, DateTime transactionDate)
+    public Transaction(
+            string description, 
+            decimal amount, 
+            DateTime transactionDate,
+            string? idempotencyKey = null)
         : base()
     {
         Description = description;
         Amount = Money.Create(amount);
         TransactionDate = transactionDate;
+        IdempotencyKey = idempotencyKey;
 
         Validate();        
     }

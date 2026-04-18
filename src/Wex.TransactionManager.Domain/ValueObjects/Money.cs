@@ -13,9 +13,13 @@ public sealed record Money
         Currency = currency;
     }
 
-    public static Money Usd(decimal value) => Create(value, "USD");
+    public static Money Zero(string currency = "USD")
+    {
+        if (string.IsNullOrWhiteSpace(currency))
+            throw new ArgumentException("Currency is required", nameof(currency));
 
-    public override string ToString() => $"{Currency} {Value:N2}";
+        return new Money(0, currency.ToUpperInvariant());
+    }
 
     public static Money Create(decimal value, string currency = "USD")
     {

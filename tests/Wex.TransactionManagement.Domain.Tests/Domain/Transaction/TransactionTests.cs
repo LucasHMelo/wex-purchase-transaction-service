@@ -20,9 +20,38 @@ public class TransactionTests
         _transactionTestFixture = transactionTestFixture;
     }
 
-    [Fact(DisplayName = nameof(Instantiate))]
+    [Fact(DisplayName = nameof(InstantiateWithIdempotencyKey))]
     [Trait("Domain", "Transaction - Aggregates")]
-    public void Instantiate()
+    public void InstantiateWithIdempotencyKey()
+    {
+        // Arrange 
+        var datetimeBefore = DateTime.UtcNow.AddSeconds(-1);
+        var validData = _transactionTestFixture.GetValidTransaction();
+
+        // Act
+        var transaction = new DomainEntity
+            .Transaction(validData.Description, 
+                         validData.Amount.Value,
+                         validData.TransactionDate,
+                         validData.IdempotencyKey);
+        var datetimeAfter = DateTime.UtcNow.AddSeconds(1);
+
+        // Asert
+        transaction.ShouldNotBeNull();
+        transaction.Id.ToString().ShouldNotBeEmpty();
+        transaction.Description.ShouldBeEquivalentTo(validData.Description);
+        transaction.Amount.Value.ShouldBe(validData.Amount.Value);
+        transaction.Id.ShouldNotBe(default(Guid));
+        transaction.TransactionDate.ShouldNotBe(default(DateTime));
+        transaction.IdempotencyKey.ShouldBe(validData.IdempotencyKey);
+        transaction.CreatedAt.ShouldNotBe(default(DateTime));
+        transaction.CreatedAt.ShouldBeGreaterThan(datetimeBefore);
+        transaction.CreatedAt.ShouldBeLessThan(datetimeAfter);
+    }
+
+    [Fact(DisplayName = nameof(InstantiateWithoutIdempotencyKey))]
+    [Trait("Domain", "Transaction - Aggregates")]
+    public void InstantiateWithoutIdempotencyKey()
     {
         // Arrange 
         var datetimeBefore = DateTime.UtcNow.AddSeconds(-1);
@@ -41,6 +70,7 @@ public class TransactionTests
         transaction.Description.ShouldBeEquivalentTo(validData.Description);
         transaction.Amount.Value.ShouldBe(validData.Amount.Value);
         transaction.Id.ShouldNotBe(default(Guid));
+        transaction.IdempotencyKey.ShouldBeNull();
         transaction.TransactionDate.ShouldNotBe(default(DateTime));
         transaction.CreatedAt.ShouldNotBe(default(DateTime));
         transaction.CreatedAt.ShouldBeGreaterThan(datetimeBefore);
