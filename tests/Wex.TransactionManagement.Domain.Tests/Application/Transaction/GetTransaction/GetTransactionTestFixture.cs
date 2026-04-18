@@ -1,6 +1,8 @@
 using System;
 using NSubstitute;
 using Wex.TransactionManagement.UnitTests.Common;
+using Wex.TransactionManager.Application.Services;
+using Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
 using Wex.TransactionManager.Domain.Repositories;
 using DomainEntity = Wex.TransactionManager.Domain.Entities;
 
@@ -32,6 +34,21 @@ public class GetTransactionTestFixture : BaseFixture
         return DateTime.UtcNow;
     }
 
+    public DateTime GetValidRateDate()
+    {
+        return DateTime.UtcNow;
+    }
+
+    public decimal GetValidRate()
+    {
+        return Faker.Random.Number(9999);
+    }
+
+    public string GetValidTargetCurrency()
+    {
+        return Faker.Finance.Currency().Code;
+    }
+
     public DomainEntity.Transaction GetValidTransaction()
         => new(
             GetValidTransactionDescription(),
@@ -39,8 +56,24 @@ public class GetTransactionTestFixture : BaseFixture
             GetValidTransactionDate()
         );
 
+    public GetTransactionInput GetValidTransactionInput()
+        => new(
+            Guid.NewGuid(),
+            GetValidTargetCurrency()
+        );
+
+    public ExchangeRateResult GetValidExchangeRateResult()
+        => new ExchangeRateResult{
+            Rate = GetValidRate(),
+            RateDate = GetValidRateDate()
+        };
+
+        
 
     public ITransactionRepository GetRepositoryMock()
         => Substitute.For<ITransactionRepository>();
+
+    public IExchangeRateService GetRateExchangeServiceMock()
+        => Substitute.For<IExchangeRateService>();
 
 }

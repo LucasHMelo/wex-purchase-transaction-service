@@ -17,14 +17,23 @@ public class GetTransactionTests(GetTransactionTestFixture fixture)
     {
         var repositoryMock = _fixture.GetRepositoryMock();
         var exampleTransaction = _fixture.GetValidTransaction();
+        var rateExchangeMock = _fixture.GetRateExchangeServiceMock();
+        var exampleTransactionInput = _fixture.GetValidTransactionInput();
+        var exampleRate = _fixture.GetValidExchangeRateResult();
 
         repositoryMock.Get(
             Arg.Any<Guid>(),
             Arg.Any<CancellationToken>()
         ).Returns(exampleTransaction);
 
-        var input = new UseCase.GetTransactionInput(exampleTransaction.Id);
-        var useCase = new UseCase.GetTransaction(repositoryMock);
+        rateExchangeMock.GetExchangeRateWithDateAsync(
+            Arg.Any<string>(),
+            Arg.Any<DateTime>(),
+            Arg.Any<CancellationToken>()
+        ).Returns(exampleRate);
+
+        var input = new UseCase.GetTransactionInput(exampleTransactionInput.Id, exampleTransactionInput.TargetCurrency);
+        var useCase = new UseCase.GetTransaction(repositoryMock, rateExchangeMock);
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
@@ -35,10 +44,10 @@ public class GetTransactionTests(GetTransactionTestFixture fixture)
 
         output.ShouldNotBeNull();
         output.Description.ShouldBe(exampleTransaction.Description);
-        output.Amount.ShouldBeEquivalentTo(exampleTransaction.Amount.Value.ToString());
+        output.OriginalAmount.Value.ShouldBeEquivalentTo(exampleTransaction.Amount.Value);
         output.Id.ShouldBe(exampleTransaction.Id);
-        output.CreatedAt.ShouldBe(exampleTransaction.CreatedAt.ToString());
-        output.TransactionDate.ShouldBe(exampleTransaction.TransactionDate.ToString());
+        output.CreatedAt.ShouldBeEquivalentTo(exampleTransaction.CreatedAt);
+        output.TransactionDate.ShouldBeEquivalentTo(exampleTransaction.TransactionDate);
     }
 
     [Fact(DisplayName = nameof(NotFoundExceptionWhenTransactionDoesntExist))]
@@ -46,17 +55,25 @@ public class GetTransactionTests(GetTransactionTestFixture fixture)
     public async Task NotFoundExceptionWhenTransactionDoesntExist()
     {
         var repositoryMock = _fixture.GetRepositoryMock();
-        var exampleGuid = Guid.NewGuid();
+        var rateExchangeMock = _fixture.GetRateExchangeServiceMock();
+        var exampleTransactionInput = _fixture.GetValidTransactionInput();
+        var exampleRate = _fixture.GetValidExchangeRateResult();
+
+        rateExchangeMock.GetExchangeRateWithDateAsync(
+            Arg.Any<string>(),
+            Arg.Any<DateTime>(),
+            Arg.Any<CancellationToken>()
+        ).Returns(exampleRate);
 
         repositoryMock.Get(
             Arg.Any<Guid>(),
             Arg.Any<CancellationToken>()
         ).Returns(_ => Task.FromException<DomainEntity.Transaction>(
-            new NotFoundException($"Transaction '{exampleGuid}' not found")
+            new NotFoundException($"Transaction '{exampleTransactionInput.Id}' not found")
         ));
 
-        var input = new UseCase.GetTransactionInput(exampleGuid);
-        var useCase = new UseCase.GetTransaction(repositoryMock);
+        var input = new UseCase.GetTransactionInput(exampleTransactionInput.Id, exampleTransactionInput.TargetCurrency);
+        var useCase = new UseCase.GetTransaction(repositoryMock, rateExchangeMock);
 
         var task = async ()
             => await useCase.Handle(input, CancellationToken.None);
