@@ -35,10 +35,11 @@ namespace Wex.TransactionManager.Api.Controllers
         [ProducesResponseType(typeof(GetTransactionOutput), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(
             [FromRoute] Guid id,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken,
+            [FromQuery] string currency = "Brazil-Real"
         )
         {
-            var output = await _mediator.Send(new GetTransactionInput(id, "BRL"), cancellationToken);
+            var output = await _mediator.Send(new GetTransactionInput(id, currency), cancellationToken);
             return Ok(output);
         }
 
