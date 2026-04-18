@@ -1,8 +1,7 @@
-using System;
-
 namespace Wex.TransactionManager.Application.Exceptions;
 
-public class NotFoundException
+public class NotFoundException : ApplicationException
 {
-
+    public NotFoundException(string? message) : base(message)
+    {}
 }
