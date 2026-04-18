@@ -33,6 +33,10 @@ public class TransactionRepositoryTestFixture
         return DateTime.UtcNow;
     }
 
+    public List<Transaction> GetExampleTransactionsList(int length = 10)
+        => Enumerable.Range(1, length)
+            .Select(_ => GetExampleTransaction()).ToList();
+
     public Transaction GetExampleTransaction()
         => new Transaction(GetValidTransactionDescription(), GetValidTransactionAmount(), GetValidTransactionDate());
 

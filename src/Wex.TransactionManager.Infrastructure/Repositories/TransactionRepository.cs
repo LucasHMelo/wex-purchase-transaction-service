@@ -23,5 +23,9 @@ public class TransactionRepository
 
 
    
-    public Task<Transaction> Get(Guid id, CancellationToken cancellationToken) => throw new NotImplementedException();
+    public async Task<Transaction> Get(Guid id, CancellationToken cancellationToken) 
+        => await _transactions.FindAsync( 
+            new object[] { id }, 
+            cancellationToken
+        );
 }

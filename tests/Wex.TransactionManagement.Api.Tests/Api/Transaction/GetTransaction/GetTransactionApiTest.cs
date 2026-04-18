@@ -1,5 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using Shouldly;
+using Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
 
 namespace Wex.TransactionManagement.E2ETests.Api.Transaction.GetTransaction;
 
@@ -19,8 +21,8 @@ public class GetTransactionApiTest
         await _fixture.Persistence.InsertList(exampleTransactionsList);
         var exampleTransaction = exampleTransactionsList[10];
 
-        var (response, output) = await _fixture.ApiClient.Get<TransactionModelOutput>(
-            $"/Transactions/{exampleTransaction.Id}"
+        var (response, output) = await _fixture.ApiClient.Get<GetTransactionOutput>(
+            $"/api/transaction/{exampleTransaction.Id}"
         );
 
         response.ShouldNotBeNull();
@@ -28,6 +30,6 @@ public class GetTransactionApiTest
         output.ShouldNotBeNull();
         output!.Id.ShouldBe(exampleTransaction.Id);
         output.Description.ShouldBe(exampleTransaction.Description);
-        output.CreatedAt.ShouldBe(exampleTransaction.CreatedAt);
+        output.Amount.ShouldBe(exampleTransaction.Amount.Value.ToString());
     }
 }

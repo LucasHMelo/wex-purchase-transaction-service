@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
+using Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
 using Wex.TransactionManager.Domain.Entities;
 using Wex.TransactionManager.Domain.Repositories;
 
@@ -29,5 +30,17 @@ namespace Wex.TransactionManager.Api.Controllers
                 response
             );
         }
+
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(GetTransactionOutput), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetById(
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken
+        )
+        {
+            var output = await _mediator.Send(new GetTransactionInput(id), cancellationToken);
+            return Ok(output);
+        }
+
     }
 }

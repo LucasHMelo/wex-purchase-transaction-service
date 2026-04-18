@@ -28,4 +28,28 @@ public class TransactionRepositoryTests(TransactionRepositoryTestFixture fixture
         dbTransaction.CreatedAt.ShouldBe(exampleTransaction.CreatedAt);
     }
 
+     [Fact(DisplayName = nameof(Get))]
+    [Trait("Integration/Infra.Data", "TransactionRepository - Repositories")]
+    public async Task Get()
+    {
+        WexTransactionDbContext dbContext = _fixture.CreateDbContext();
+        var exampleTransaction = _fixture.GetExampleTransaction();
+        var exampleTransactionsList = _fixture.GetExampleTransactionsList(15);
+        exampleTransactionsList.Add(exampleTransaction);
+        await dbContext.AddRangeAsync(exampleTransactionsList);
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+        var transactionRepository = new InfraRepository.TransactionRepository(dbContext);
+
+        var dbTransaction = await transactionRepository.Get(
+            exampleTransaction.Id, 
+            CancellationToken.None);
+
+        dbTransaction.ShouldNotBeNull();
+        dbTransaction.Id.ShouldBe(exampleTransaction.Id);
+        dbTransaction.Description.ShouldBe(exampleTransaction.Description);
+        dbTransaction.Amount.Value.ShouldBe(exampleTransaction.Amount.Value);
+        dbTransaction.TransactionDate.ShouldBe(exampleTransaction.TransactionDate);
+        dbTransaction.CreatedAt.ShouldBe(exampleTransaction.CreatedAt);
+    }
+
 }
