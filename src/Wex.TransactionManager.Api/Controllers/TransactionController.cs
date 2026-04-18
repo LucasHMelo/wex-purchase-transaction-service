@@ -38,7 +38,7 @@ namespace Wex.TransactionManager.Api.Controllers
             CancellationToken cancellationToken
         )
         {
-            var output = await _mediator.Send(new GetTransactionInput(id), cancellationToken);
+            var output = await _mediator.Send(new GetTransactionInput(id, "BRL"), cancellationToken);
             return Ok(output);
         }
 

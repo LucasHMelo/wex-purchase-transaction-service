@@ -109,8 +109,11 @@ public class TransactionTests
     [InlineData(null)]
     public void InstantiateErrorWhenDescriptionIsNull(string? description)
     {
+        // Arrange 
         Action action =
             () => new DomainEntity.Transaction(description!, 100, DateTime.UtcNow);
+
+        // Act & Assert
         var exception = Assert.Throws<EntityValidationException>(action);
         exception.Message.ShouldBeEquivalentTo("Description should not be null");
     }
@@ -119,9 +122,12 @@ public class TransactionTests
     [Trait("Domain", "Transaction - Aggregates")]
     public void InstantiateErrorWhenDescriptionIsGreaterThan50Characters()
     {
+        // Arrange 
         var invalidDescription = String.Join(null, Enumerable.Range(1, 51).Select(_ => "a").ToArray());
         Action action =
             () => new DomainEntity.Transaction(invalidDescription, 100, DateTime.UtcNow);
+
+        // Act & Assert
         var exception = Should.Throw<EntityValidationException>(action);
         exception.Message.ShouldBeEquivalentTo("Description should be less or equal 50 characters long");
     }
@@ -132,22 +138,14 @@ public class TransactionTests
     [InlineData(-1.000)]
     public void InstantiateErrorWhenAmountIsInvalid(decimal amount)
     {
+        // Arrange 
+
         Action action =
             () => new DomainEntity.Transaction("Description", amount, DateTime.UtcNow);
+
+        // Act & Assert
+        
         var exception = Should.Throw<EntityValidationException>(action);
         exception.Message.ShouldBeEquivalentTo("Value must be positive");
     }
-
-    // [Fact]
-    // public void TransactionEntity_Create_ShouldReturnTrue()
-    // {
-    //     // Arrange 
-
-    //     // Act
-
-    //     // Asert
-
-    // }
-
-
 }

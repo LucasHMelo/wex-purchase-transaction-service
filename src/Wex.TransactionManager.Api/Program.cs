@@ -1,8 +1,16 @@
 using Wex.TransactionManager.Api.Configurations;
+using Wex.TransactionManager.Application.Interfaces;
+using Wex.TransactionManager.Infrastructure.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpClient<ITreasuryApiClient, TreasuryApiClient>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["TreasuryApi:BaseUrl"] 
+                               ?? throw new InvalidOperationException("TreasuryApi:BaseUrl não configurado."));
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 
 builder.Services
     .AddAppConections(builder.Configuration)

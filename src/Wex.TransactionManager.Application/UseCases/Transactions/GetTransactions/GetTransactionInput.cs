@@ -5,6 +5,10 @@ namespace Wex.TransactionManager.Application.UseCases.Transactions.GetTransactio
 public class GetTransactionInput : IRequest<GetTransactionOutput>
 {
     public Guid Id { get; set; }
-    public GetTransactionInput(Guid id) 
-        => Id = id;
+    public string TargetCurrency { get; }
+    public GetTransactionInput(Guid id, string targetCurrency)
+    {
+        Id = id;
+        TargetCurrency = targetCurrency;
+    }
 }

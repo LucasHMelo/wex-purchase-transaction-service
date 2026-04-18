@@ -1,6 +1,8 @@
 using MediatR;
 using Wex.TransactionManager.Application.Interfaces;
+using Wex.TransactionManager.Application.Services;
 using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
+using Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
 using Wex.TransactionManager.Domain.Repositories;
 using Wex.TransactionManager.Infrastructure;
 using Wex.TransactionManager.Infrastructure.Repositories;
@@ -14,7 +16,9 @@ public static class UseCasesConfiguration
     )
     {
         services.AddMediatR(typeof(CreateTransaction));
+        services.AddMediatR(typeof(GetTransaction));
         services.AddRepositories();
+        services.AddServices();
         return services;
     }
 
@@ -27,5 +31,12 @@ public static class UseCasesConfiguration
         return services;
     }
 
+    private static IServiceCollection AddServices(
+            this IServiceCollection services
+        )
+    {
+        services.AddScoped<IExchangeRateService, ExchangeRateService>();
+        return services;
+    }
 
 }

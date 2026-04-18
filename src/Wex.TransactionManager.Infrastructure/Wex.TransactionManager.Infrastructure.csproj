@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Clients\" />
+    <Folder Include="Clients\Models\" />
     <Folder Include="Configurations\" />
     <Folder Include="Data\" />
     <Folder Include="Data\DbContexts\" />
