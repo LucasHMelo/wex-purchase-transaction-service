@@ -3,6 +3,7 @@ using Shouldly;
 using UseCase = Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
 using DomainEntity = Wex.TransactionManager.Domain.Entities;
 using Wex.TransactionManager.Application.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace Wex.TransactionManagement.UnitTests.Application.Transaction.GetTransaction;
 
@@ -18,6 +19,7 @@ public class GetTransactionTests(GetTransactionTestFixture fixture)
         var repositoryMock = _fixture.GetRepositoryMock();
         var exampleTransaction = _fixture.GetValidTransaction();
         var rateExchangeMock = _fixture.GetRateExchangeServiceMock();
+        var loggerMock = _fixture.GetLoggerMock();
         var exampleTransactionInput = _fixture.GetValidTransactionInput();
         var exampleRate = _fixture.GetValidExchangeRateResult();
 
@@ -33,7 +35,7 @@ public class GetTransactionTests(GetTransactionTestFixture fixture)
         ).Returns(exampleRate);
 
         var input = new UseCase.GetTransactionInput(exampleTransactionInput.Id, exampleTransactionInput.TargetCurrency);
-        var useCase = new UseCase.GetTransaction(repositoryMock, rateExchangeMock);
+        var useCase = new UseCase.GetTransaction(repositoryMock, rateExchangeMock, loggerMock);
 
         var output = await useCase.Handle(input, CancellationToken.None);
 
@@ -55,6 +57,7 @@ public class GetTransactionTests(GetTransactionTestFixture fixture)
     public async Task NotFoundExceptionWhenTransactionDoesntExist()
     {
         var repositoryMock = _fixture.GetRepositoryMock();
+        var loggerMock = _fixture.GetLoggerMock();
         var rateExchangeMock = _fixture.GetRateExchangeServiceMock();
         var exampleTransactionInput = _fixture.GetValidTransactionInput();
         var exampleRate = _fixture.GetValidExchangeRateResult();
@@ -73,7 +76,7 @@ public class GetTransactionTests(GetTransactionTestFixture fixture)
         ));
 
         var input = new UseCase.GetTransactionInput(exampleTransactionInput.Id, exampleTransactionInput.TargetCurrency);
-        var useCase = new UseCase.GetTransaction(repositoryMock, rateExchangeMock);
+        var useCase = new UseCase.GetTransaction(repositoryMock, rateExchangeMock, loggerMock);
 
         var task = async ()
             => await useCase.Handle(input, CancellationToken.None);

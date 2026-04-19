@@ -4,14 +4,19 @@ using Wex.TransactionManagement.UnitTests.Common;
 using Wex.TransactionManager.Application.Services;
 using Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
 using Wex.TransactionManager.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 using DomainEntity = Wex.TransactionManager.Domain.Entities;
+using UseCase = Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
+
+
 
 namespace Wex.TransactionManagement.UnitTests.Application.Transaction.GetTransaction;
 
 [CollectionDefinition(nameof(GetTransactionTestFixture))]
 public class GetTransactionTestFixtureCollection :
-    ICollectionFixture<GetTransactionTestFixture> {}
-    
+    ICollectionFixture<GetTransactionTestFixture>
+{ }
+
 public class GetTransactionTestFixture : BaseFixture
 {
     public decimal GetValidTransactionAmount()
@@ -63,12 +68,13 @@ public class GetTransactionTestFixture : BaseFixture
         );
 
     public ExchangeRateResult GetValidExchangeRateResult()
-        => new ExchangeRateResult{
+        => new ExchangeRateResult
+        {
             Rate = GetValidRate(),
             RateDate = GetValidRateDate()
         };
 
-        
+
 
     public ITransactionRepository GetRepositoryMock()
         => Substitute.For<ITransactionRepository>();
@@ -76,4 +82,6 @@ public class GetTransactionTestFixture : BaseFixture
     public IExchangeRateService GetRateExchangeServiceMock()
         => Substitute.For<IExchangeRateService>();
 
+    public ILogger<UseCase.GetTransaction> GetLoggerMock()
+        => Substitute.For<ILogger<UseCase.GetTransaction>>();
 }

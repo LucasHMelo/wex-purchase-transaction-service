@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Base\" />
+    <Folder Include="Clients\" />
     <Folder Include="Infra.Data.EF\UnitOfWorkTests\" />
   </ItemGroup>
 
