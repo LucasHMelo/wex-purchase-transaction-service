@@ -1,7 +1,10 @@
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Serilog;
+using StackExchange.Redis;
 using Wex.TransactionManager.Api.Configurations;
 using Wex.TransactionManager.Application.Interfaces;
 using Wex.TransactionManager.Infrastructure.Clients;
+using ZiggyCreatures.Caching.Fusion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +26,20 @@ builder.Services
     .AddUseCases()
     .AddAndConfigureControllers();
 
-builder.Services.AddDistributedMemoryCache();
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+if(string.IsNullOrEmpty(redisConnectionString)) 
+    throw new ArgumentNullException("ConnectionString.Redis");
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(
+    
+    ConnectionMultiplexer.Connect(redisConnectionString)
+);
+
+builder.Services.AddFusionCache()
+    .WithDistributedCache(new RedisCache(new RedisCacheOptions
+    {
+        Configuration = redisConnectionString
+    }));
 
 var app = builder.Build();
 

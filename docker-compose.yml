@@ -15,9 +15,21 @@ services:
       - transactiondb_data:/var/lib/postgresql/data
     networks:
       - transaction_network
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - transaction_network
 
 volumes:
   transactiondb_data:
+  redis_data:
 
 networks:
   transaction_network:

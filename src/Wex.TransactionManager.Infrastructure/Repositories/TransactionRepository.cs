@@ -21,8 +21,6 @@ public class TransactionRepository
     )
         => await _transactions.AddAsync(aggregate, cancellationToken);
 
-
-   
     public async Task<Transaction> Get(Guid id, CancellationToken cancellationToken) 
         => await _transactions.FindAsync( 
             new object[] { id }, 

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Cache\" />
     <Folder Include="Clients\" />
     <Folder Include="Clients\Models\" />
     <Folder Include="Configurations\" />
@@ -23,6 +24,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
     <PackageReference Include="Polly" Version="8.4.1" />
+    <PackageReference Include="ZiggyCreatures.FusionCache" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>

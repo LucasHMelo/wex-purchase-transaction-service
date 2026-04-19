@@ -1,6 +1,7 @@
 using MediatR;
 using Wex.TransactionManager.Application.Interfaces;
 using Wex.TransactionManager.Application.Services;
+using Wex.TransactionManager.Application.Services.Cache;
 using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
 using Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
 using Wex.TransactionManager.Domain.Repositories;
@@ -27,6 +28,7 @@ public static class UseCasesConfiguration
         )
     {
         services.AddTransient<ITransactionRepository, TransactionRepository>();
+        services.AddTransient<IExchangeRateRepository, ExchangeRateRepositoryCache>();
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         return services;
     }

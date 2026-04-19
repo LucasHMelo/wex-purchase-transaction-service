@@ -12,13 +12,13 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0" />
+    <PackageReference Include="ZiggyCreatures.FusionCache" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="DTOs\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

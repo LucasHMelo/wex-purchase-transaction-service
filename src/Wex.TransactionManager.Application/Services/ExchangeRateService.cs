@@ -33,6 +33,7 @@ public class ExchangeRateService(
         var sixMonthsAgo = today.AddMonths(-6);
         var startDate = requestedDate < sixMonthsAgo ? requestedDate : sixMonthsAgo;
              _logger.LogInformation("Fetching exchange rates bucket for {Currency} from {StartDate}", currency, startDate);
+
         var ratesFromApi = await _treasuryApiClient.GetExchangeRatesRangeAsync(currency, startDate, cancellationToken);
 
         var finalRateResult = FindRateInBucketWithDate(ratesFromApi, requestedDate);
