@@ -16,18 +16,14 @@ builder.Host.UseSerilog((context, configuration) =>
         .WriteTo.Console(
             outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {SourceContext}: {Message:lj} {Properties:j}{NewLine}{Exception}"));
 
-// Add services to the container.
-builder.Services.AddHttpClient<ITreasuryApiClient, TreasuryApiClient>(client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["TreasuryApi:BaseUrl"] 
-                               ?? throw new InvalidOperationException("TreasuryApi:BaseUrl não configurado."));
-    client.Timeout = TimeSpan.FromSeconds(30);
-});
 
 builder.Services
+    .AddPollyConfiguration(builder.Configuration)
     .AddAppConections(builder.Configuration)
     .AddUseCases()
     .AddAndConfigureControllers();
+
+builder.Services.AddDistributedMemoryCache();
 
 var app = builder.Build();
 

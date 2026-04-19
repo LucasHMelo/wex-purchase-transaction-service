@@ -10,7 +10,7 @@ namespace Wex.TransactionManager.Api.Controllers
     public class TransactionController(IMediator mediator, ILogger<TransactionController> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
-         private readonly ILogger<TransactionController> _logger = logger;
+        private readonly ILogger<TransactionController> _logger = logger;
 
         [HttpPost]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
@@ -38,8 +38,11 @@ namespace Wex.TransactionManager.Api.Controllers
             [FromQuery] string currency = "Brazil-Real"
         )
         {
+            if (currency.Length > 20)
+                return BadRequest("Invalid currency");
+
             _logger.LogInformation("Retrieving Transaction {TransactionId} with currency conversion to {TargetCurrency}", id, currency);
-            
+
             var output = await _mediator.Send(new GetTransactionInput(id, currency), cancellationToken);
             return Ok(output);
         }

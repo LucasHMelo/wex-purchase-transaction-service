@@ -17,18 +17,18 @@ public class ExchangeRateService(
         var today = DateTime.Today;
         var requestedDate = date.Date;
 
-        // if (requestedDate == today)
-        // {
-            // _logger.LogInformation("Fetching current day rate for {Currency} on {Date} (no cache)", currency, requestedDate);
-        //     var rate = await _treasuryApiClient.GetExchangeRateAsync(currency, requestedDate, cancellationToken);
+        if (requestedDate == today)
+        {
+            _logger.LogInformation("Fetching current day rate for {Currency} on {Date} (no cache)", currency, requestedDate);
+            var rate = await _treasuryApiClient.GetExchangeRateAsync(currency, requestedDate, cancellationToken);
             
-        //     if (!rate.HasValue)
-        //     {
-        //         throw new Exception(currency);
-        //     }
+            if (!rate.HasValue)
+            {
+                throw new Exception(currency);
+            }
             
-        //     return new ExchangeRateResult { Rate = rate.Value, RateDate = requestedDate };
-        // }
+            return new ExchangeRateResult { Rate = rate.Value, RateDate = requestedDate };
+        }
 
         var sixMonthsAgo = today.AddMonths(-6);
         var startDate = requestedDate < sixMonthsAgo ? requestedDate : sixMonthsAgo;
