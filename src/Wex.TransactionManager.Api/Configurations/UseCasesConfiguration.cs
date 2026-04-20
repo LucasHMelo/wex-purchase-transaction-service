@@ -16,8 +16,7 @@ public static class UseCasesConfiguration
     )
     {
         services.AddMediatR(typeof(CreateTransaction));
-        services.AddMediatR(cfg =>
-            cfg.RegisterServicesFromAssembly(typeof(GetTransaction).Assembly));
+        services.AddMediatR(typeof(GetTransaction).Assembly);
         services.AddRepositories();
         services.AddServices();
         return services;
@@ -28,7 +27,7 @@ public static class UseCasesConfiguration
         )
     {
         services.AddTransient<ITransactionRepository, TransactionRepository>();
-        //services.AddTransient<IExchangeRateRepository, ExchangeRateRepositoryCache>();
+        services.AddTransient<IExchangeRateRepository, ExchangeRateRepository>();
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         return services;
     }
