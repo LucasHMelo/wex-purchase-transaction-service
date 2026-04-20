@@ -1,3 +1,4 @@
+using System.Reflection;
 using MediatR;
 using Wex.TransactionManager.Application.Interfaces;
 using Wex.TransactionManager.Application.Services;
@@ -15,8 +16,13 @@ public static class UseCasesConfiguration
         this IServiceCollection services
     )
     {
-        services.AddMediatR(typeof(CreateTransaction));
-        services.AddMediatR(typeof(GetTransaction).Assembly);
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblies(
+                typeof(GetTransaction).Assembly
+            );
+        });
+        services.AddScoped<IRequestHandler<GetTransactionInput, GetTransactionOutput>, GetTransaction>();
         services.AddRepositories();
         services.AddServices();
         return services;

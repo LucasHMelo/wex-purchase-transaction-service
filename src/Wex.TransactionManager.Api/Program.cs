@@ -1,11 +1,16 @@
+using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Serilog;
 using StackExchange.Redis;
 using Wex.TransactionManager.Api.Configurations;
+using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
+using Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
 using ZiggyCreatures.Caching.Fusion;
+using ZiggyCreatures.Caching.Fusion.Serialization.SystemTextJson;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Host.UseSerilog((context, configuration) =>
     configuration
@@ -17,13 +22,6 @@ builder.Host.UseSerilog((context, configuration) =>
         .Enrich.WithThreadId()
         .WriteTo.Console(
             outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {SourceContext}: {Message:lj} {Properties:j}{NewLine}{Exception}"));
-
-
-builder.Services
-    .AddPollyConfiguration(builder.Configuration)
-    .AddAppConections(builder.Configuration)
-    .AddUseCases()
-    .AddAndConfigureControllers();
 
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
 if(string.IsNullOrEmpty(redisConnectionString)) 
@@ -40,6 +38,13 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = "wex-transactions:";
 });
 
+builder.Services
+    .AddPollyConfiguration(builder.Configuration)
+    .AddAppConections(builder.Configuration)
+    .AddUseCases()
+    .AddAndConfigureControllers();
+
+
 builder.Services.AddFusionCache()
     .WithDefaultEntryOptions(new FusionCacheEntryOptions
     {
@@ -55,7 +60,12 @@ builder.Services.AddFusionCache()
         EagerRefreshThreshold = 0.7f
     })
     .WithDistributedCache(sp =>
-        sp.GetRequiredService<IDistributedCache>());
+        sp.GetRequiredService<IDistributedCache>())
+    .WithSerializer( 
+        new FusionCacheSystemTextJsonSerializer()
+    );
+
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -66,10 +76,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
 public partial class Program { }
