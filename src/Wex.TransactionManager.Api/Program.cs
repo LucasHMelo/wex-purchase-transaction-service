@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Serilog;
@@ -6,6 +7,7 @@ using StackExchange.Redis;
 using Wex.TransactionManager.Api.Configurations;
 using Wex.TransactionManager.Application.UseCases.Transactions.CreateTransactions;
 using Wex.TransactionManager.Application.UseCases.Transactions.GetTransactions;
+using Wex.TransactionManager.Infrastructure.Data.DbContexts;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization.SystemTextJson;
 
@@ -68,6 +70,12 @@ builder.Services.AddFusionCache()
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<WexTransactionDbContext>();
+    db.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {

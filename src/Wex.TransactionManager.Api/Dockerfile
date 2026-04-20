@@ -1,20 +1,34 @@
+# =========================
+# Base runtime (leve)
+# =========================
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 8080
 
+# instalar curl para healthcheck
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+# =========================
+# Build
+# =========================
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["src/Wex.TransactionManager.Api/Wex.TransactionManager.Api.csproj", "src/Wex.TransactionManager.Api/"]
-RUN dotnet restore "src/Wex.TransactionManager.Api/Wex.TransactionManager.Api.csproj"
+
+# copia tudo (evita erro de path)
 COPY . .
-WORKDIR "/src/src/Wex.TransactionManager.Api"
-RUN dotnet build "Wex.TransactionManager.Api.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "Wex.TransactionManager.Api.csproj" -c Release -o /app/publish
+# restaura dependências
+RUN dotnet restore
 
+# publica aplicação
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
+
+# =========================
+# Final
+# =========================
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+
+COPY --from=build /app/publish .
+
 ENTRYPOINT ["dotnet", "Wex.TransactionManager.Api.dll"]

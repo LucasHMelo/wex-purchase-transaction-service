@@ -5,12 +5,12 @@ services:
     container_name: transaction-api
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./src/Wex.TransactionManager.Api/Dockerfile
     ports:
       - "8080:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__Default: Host=localhost;Port=5432;Database=transactiondb;Username=postgres;Password=${POSTGRES_PASSWORD}
+      ConnectionStrings__Default: Host=db;Port=5432;Database=transactiondb;Username=postgres;Password=${POSTGRES_PASSWORD}
       Redis__Connection: redis:6379
     depends_on:
       db:

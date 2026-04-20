@@ -11,8 +11,10 @@ public class WexTransactionDbContextFactory
     {
         var optionsBuilder = new DbContextOptionsBuilder<WexTransactionDbContext>();
 
-        optionsBuilder.UseNpgsql(
-            "Host=localhost;Port=5432;Database=transactiondb;Username=postgres;Password=123456");
+        var connectionString =
+            Environment.GetEnvironmentVariable("ConnectionStrings__TransactionDb");
+
+        optionsBuilder.UseNpgsql(connectionString);
 
         return new WexTransactionDbContext(optionsBuilder.Options);
     }
