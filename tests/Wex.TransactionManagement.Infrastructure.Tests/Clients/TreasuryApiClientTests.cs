@@ -1,7 +1,9 @@
 using System.Net;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Wex.TransactionManager.Infrastructure.Clients;
+using Wex.TransactionManager.Infrastructure.Configurations;
 
 namespace Wex.TransactionManagement.IntegrationTests.Clients;
 
@@ -11,14 +13,17 @@ public class TreasuryApiClientTests
     private readonly HttpClient _httpClient;
     private readonly ILogger<TreasuryApiClient> _logger;
     private readonly TreasuryApiClient _treasuryApiClient;
+    private readonly IOptions<TreasuryApiSettings> _options;
+      
 
     public TreasuryApiClientTests()
     {
         _httpMessageHandler = Substitute.ForPartsOf<HttpMessageHandler>();
         _httpClient = new HttpClient(_httpMessageHandler);
         _logger = Substitute.For<ILogger<TreasuryApiClient>>();
+        _options = Substitute.ForPartsOf<IOptions<TreasuryApiSettings>>();
 
-        _treasuryApiClient = new TreasuryApiClient(_httpClient, _logger);
+        _treasuryApiClient = new TreasuryApiClient(_httpClient, _logger, _options);
     }
 
     private TreasuryApiClient CreateClient(
@@ -38,7 +43,7 @@ public class TreasuryApiClientTests
 
         var logger = Substitute.For<ILogger<TreasuryApiClient>>();
 
-        return new TreasuryApiClient(httpClient, logger);
+        return new TreasuryApiClient(httpClient, logger, _options);
     }
 
     [Fact]
@@ -116,7 +121,8 @@ public class TreasuryApiClientTests
             throw new HttpRequestException("Network error"));
 
         var client = new TreasuryApiClient(new HttpClient(handler),
-            Substitute.For<ILogger<TreasuryApiClient>>());
+            Substitute.For<ILogger<TreasuryApiClient>>(),
+            _options);
 
         var result = await client.GetExchangeRateAsync("BRL", new DateTime(2023, 12, 15));
 

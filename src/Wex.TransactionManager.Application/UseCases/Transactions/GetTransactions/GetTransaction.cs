@@ -9,7 +9,7 @@ namespace Wex.TransactionManager.Application.UseCases.Transactions.GetTransactio
 public class GetTransaction(ITransactionRepository TransactionRepository,
     IExchangeRateService exchangeRateService,
     ILogger<GetTransaction> logger)
-    : IGetTransaction
+    : IRequestHandler<GetTransactionInput, GetTransactionOutput>
 {
     private readonly ITransactionRepository _transactionRepository = TransactionRepository;
     private readonly IExchangeRateService _exchangeRateService = exchangeRateService;

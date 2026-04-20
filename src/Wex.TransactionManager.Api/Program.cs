@@ -1,9 +1,8 @@
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Serilog;
 using StackExchange.Redis;
 using Wex.TransactionManager.Api.Configurations;
-using Wex.TransactionManager.Application.Interfaces;
-using Wex.TransactionManager.Infrastructure.Clients;
 using ZiggyCreatures.Caching.Fusion;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,15 +34,31 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(
     ConnectionMultiplexer.Connect(redisConnectionString)
 );
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = redisConnectionString;
+    options.InstanceName = "wex-transactions:";
+});
+
 builder.Services.AddFusionCache()
-    .WithDistributedCache(new RedisCache(new RedisCacheOptions
+    .WithDefaultEntryOptions(new FusionCacheEntryOptions
     {
-        Configuration = redisConnectionString
-    }));
+        Duration = TimeSpan.FromMinutes(5),
+        DistributedCacheDuration = TimeSpan.FromHours(24),
+
+        IsFailSafeEnabled = true,
+        FailSafeMaxDuration = TimeSpan.FromHours(1),
+
+        FactorySoftTimeout = TimeSpan.FromSeconds(2),
+        FactoryHardTimeout = TimeSpan.FromSeconds(5),
+
+        EagerRefreshThreshold = 0.7f
+    })
+    .WithDistributedCache(sp =>
+        sp.GetRequiredService<IDistributedCache>());
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

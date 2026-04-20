@@ -47,7 +47,6 @@ public class TreasuryApiClient : ITreasuryApiClient
                        outcome.Exception?.Message ?? outcome.Result?.StatusCode.ToString());
                });
 
-        // Configure circuit breaker policy
         _circuitBreakerPolicy = Policy<HttpResponseMessage>
             .Handle<HttpRequestException>()
             .OrResult(msg => (int)msg.StatusCode >= 500)
@@ -63,10 +62,8 @@ public class TreasuryApiClient : ITreasuryApiClient
     {
         try
         {
-            // Treasury API expects date in YYYY-MM-DD format for daily rates
             var dateParam = date.ToString("YYYY-MM-DD");
 
-            // Build the request URL for Treasury API
             var requestUrl = $"/services/api/fiscal_service/v1/accounting/od/rates_of_exchange" +
                            $"?fields=country_currency_desc,exchange_rate,record_date" +
                            $"&filter=record_date:lte:{dateParam},country_currency_desc:eq:{currency}" +
@@ -93,7 +90,6 @@ public class TreasuryApiClient : ITreasuryApiClient
                 PropertyNameCaseInsensitive = true
             });
 
-            // Parse the exchange rate from string to decimal
             decimal? rate = null;
             var firstRecord = treasuryResponse?.Data?.FirstOrDefault();
             if (firstRecord != null && !string.IsNullOrEmpty(firstRecord.ExchangeRate))

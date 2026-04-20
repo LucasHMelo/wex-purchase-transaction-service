@@ -8,11 +8,6 @@ namespace Wex.TransactionManagement.UnitTests.Domain.Transaction;
 [Collection(nameof(TransactionTestFixture))]
 public class TransactionTests
 {
-
-    //     Description: must not exceed 50 characters
-    // Transaction date: must be a valid date format
-    // Purchase amount: must be a valid positive amount rounded to the nearest cent
-    // Unique identifier: must uniquely identify the purchase
     private readonly TransactionTestFixture _transactionTestFixture;
 
     public TransactionTests(TransactionTestFixture transactionTestFixture)
